@@ -1,0 +1,349 @@
+html,
+body {
+  margin: 0;
+}
+
+body {
+  width: auto;
+  height: 100%;
+  background: #ffffff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  display: inline-flex;
+}
+
+main {
+  display: inline-flex;
+  margin-top: 70px;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  height: calc(100vh - 70px);
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.poppins-thin-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.poppins-extralight-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.poppins-light-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.poppins-regular-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.poppins-medium-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poppins-semibold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poppins-bold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poppins-extrabold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.poppins-black-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.dm-sans-thin {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.dm-sans-extralight {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.dm-sans-light {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.dm-sans-regular {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dm-sans-medium {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.dm-sans-semibold {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.dm-sans-bold {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.dm-sans-extrabold {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.dm-sans-black {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.dm-sans-thin-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.dm-sans-extralight-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.dm-sans-light-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.dm-sans-regular-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.dm-sans-medium-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.dm-sans-semibold-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.dm-sans-bold-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.dm-sans-extrabold-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.dm-sans-black-italic {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.inter-thin {
+  font-family: "Inter", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.inter-extralight {
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.inter-light {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.inter-regular {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.inter-medium {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.inter-semibold {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.inter-bold {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.inter-extrabold {
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.inter-black {
+  font-family: "Inter", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.inter-thin-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.inter-extralight-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.inter-light-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.inter-regular-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.inter-medium-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.inter-semibold-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.inter-bold-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.inter-extrabold-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.inter-black-italic {
+  font-family: "Inter", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
