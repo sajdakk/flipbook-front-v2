@@ -14,7 +14,6 @@ export const Wrapper = styled.div`
 	align-items: stretch;
 	width: 100%;
 	max-width: 850px;
-	padding-bottom: 24px;
 	box-sizing: border-box;
 
 	.header {
@@ -32,6 +31,16 @@ export const Wrapper = styled.div`
 		padding-left: 24px;
 		padding-right: 24px;
 		box-sizing: border-box;
+	}
+
+	@media screen and (max-width: 780px) {
+		.header {
+			font-size: 20px;
+		}
+
+		main{
+			padding-top: 0px;
+		}
 	}
 `;
 
@@ -53,6 +62,10 @@ const HeaderForm = styled.form`
 	> .surname-input {
 		flex: 1;
 	}
+
+	@media screen and (max-width: 780px) {
+		flex-direction: column;
+	}
 `;
 
 const BookList = styled.div`
@@ -63,6 +76,9 @@ const BookList = styled.div`
 	flex-direction: row;
 	align-self: center;
 	width: 100%;
+	padding-left: 24px;
+	padding-right: 24px;
+	box-sizing: border-box;
 `;
 
 const Content = styled.div`

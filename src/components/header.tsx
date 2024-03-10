@@ -125,7 +125,7 @@ export const Header: React.FC = () => {
 					<li>
 						<a
 							className={`${window.location.href.endsWith('/profile') ? `inter-regular selected` : `inter-regular `}`}
-							href="/"
+							href="/profile"
 						>
 							Profile
 						</a>

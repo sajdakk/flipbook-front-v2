@@ -1,10 +1,15 @@
 export const colors = {
 	primary: '#0E9DF5',
+	primaryShade2: '#89D2FF',
 	statusInfo: '#45B9EB',
+	statusDanger: '#DA6861',
+	statusSuccess: '#00BB90',
 	backgroundBG0: '#FFFFFF',
 	ascent: '#007BC7',
+	ascentShade: '#EBF5FC',
 	text3: '#585F63',
 	text2: '#252C32',
+	text4: '#565673',
 
 	tertiary: '#b0bec5',
 	quaternary: '#78909c',

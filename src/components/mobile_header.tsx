@@ -123,7 +123,7 @@ const Wrapper = styled.div`
     padding: 4px 24px;
     color: #000;
     text-align: left;
-    font-size: 24px;
+    font-size: 18px;
     transition-duration: 0.25s;
   }
 
@@ -132,7 +132,7 @@ const Wrapper = styled.div`
     padding: 4px 24px;
     color: var(--primary-text-light, #373e44);
     text-align: left;
-    font-size: 18px;
+    font-size: 14px;
     text-decoration: none;
     transition-duration: 0.25s;
     box-sizing: border-box;

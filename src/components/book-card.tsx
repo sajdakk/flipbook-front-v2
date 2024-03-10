@@ -1,7 +1,8 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { colors } from '../styles/colors';
-import { StarOutlined } from '@ant-design/icons';
+import { HeartFilled, StarOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -59,29 +60,51 @@ const Score = styled.div`
 	align-items: center;
 	height: 20px;
 `;
+const CardHeader = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0px;
+	padding: 0px;
+
+	> .title {
+		:first-child {
+			font-size: 14px;
+		}
+	}
+
+	.heart {
+		font-size: 16px;
+	}
+
+	@media screen and (max-width: 780px) {
+		> .title {
+			:first-child {
+				font-size: 12px;
+			}
+		}
+	}
+`;
 
 export const BookCard: React.FC = () => {
+	const navigate = useNavigate();
 	return (
-		<Wrapper>
+		<Wrapper onClick={() => navigate('/books/4')}>
 			<img
 				className="news-image"
 				src="https://i.guim.co.uk/img/media/423d3ddf306e98864c1d887c1dcf290421cd21a7/0_169_4912_6140/master/4912.jpg?width=700&quality=85&auto=format&fit=max&s=864393ed1c322fc5ddcb2766c3c945e6"
 			/>
 			<div className="news-description">
-				<div className="card-header">
+				<CardHeader>
 					<div className="title">
-						<div className="inter-semibold" style={{ fontSize: '14px', color: colors.text2 }}>
+						<div className="inter-semibold" style={{ color: colors.text2 }}>
 							Harry Potter and the philosopher's stone
 						</div>
-
-						<i className="material-icons" style={{ color: colors.ascent, cursor: 'pointer' }}>
-							favorite
-						</i>
+						<HeartFilled className="heart" style={{ color: colors.ascent, cursor: 'pointer' }} />
 					</div>
 					<div className="inter-regular" style={{ fontSize: '10px', color: colors.text3 }}>
 						Rowling, J. K.
 					</div>
-				</div>
+				</CardHeader>
 				<div className="extra-info">
 					<Score>
 						<StarOutlined style={{ color: colors.ascent }} />

@@ -5,6 +5,8 @@ import { Register } from './pages/register/register';
 import { Top } from './pages/top/top';
 import { Favorites } from './pages/favorites/favorites';
 import { Create } from './pages/create/create';
+import { Profile } from './pages/profile/profile';
+import { Details } from './pages/details/details';
 
 export const AppRoutes: React.FC = () => {
 	return (
@@ -15,6 +17,8 @@ export const AppRoutes: React.FC = () => {
 			<Route path="top" element={<Top />} />
 			<Route path="favorites" element={<Favorites />} />
 			<Route path="create" element={<Create />} />
+			<Route path="profile" element={<Profile />} />
+			<Route path="books/:id" element={<Details />} />
 		</Routes>
 	);
 };

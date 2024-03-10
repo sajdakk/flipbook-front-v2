@@ -18,6 +18,12 @@ export const Wrapper = styled.div`
 		align-self: center;
 		padding-top: 24px;
 	}
+
+	@media screen and (max-width: 780px) {
+		.header {
+			font-size: 20px;
+		}
+	}
 `;
 
 const BookList = styled.div`

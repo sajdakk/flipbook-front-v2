@@ -45,9 +45,13 @@ export const Wrapper = styled.div`
 		align-self: center;
 	}
 
-	@media screen and (max-width: 760px) {
+	@media screen and (max-width: 780px) {
 		padding-left: 24px;
 		padding-right: 24px;
+
+		.header {
+			font-size: 20px;
+		}
 	}
 `;
 
@@ -59,8 +63,24 @@ const CreateBookForm = styled.form`
 	gap: 24px;
 	display: flex;
 
-	@media screen and (max-width: 760px) {
+	.author-section {
+		font-size: 22px;
+	}
+
+	.add-new-author-label {
+		font-size: 18px;
+	}
+
+	@media screen and (max-width: 780px) {
 		padding-top: 24px;
+
+		.author-section {
+			font-size: 18px;
+		}
+
+		.add-new-author-label {
+			font-size: 16px;
+		}
 	}
 `;
 
@@ -82,6 +102,10 @@ const CreateAuthorForm = styled.form`
 		gap: 16px;
 		display: flex;
 		width: 100%;
+	}
+
+	@media screen and (max-width: 780px) {
+		flex-direction: column;
 	}
 `;
 
@@ -111,26 +135,6 @@ export const Create: React.FC = () => {
 
 	const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
 		console.log(date, dateString);
-	};
-
-	const props: UploadProps = {
-		name: 'file',
-		multiple: false,
-		action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-		onChange(info) {
-			const { status } = info.file;
-			if (status !== 'uploading') {
-				console.log(info.file, info.fileList);
-			}
-			if (status === 'done') {
-				message.success(`${info.file.name} file uploaded successfully.`);
-			} else if (status === 'error') {
-				message.error(`${info.file.name} file upload failed.`);
-			}
-		},
-		onDrop(e) {
-			console.log('Dropped files', e.dataTransfer.files);
-		},
 	};
 
 	const authors: SelectProps['options'] = [];
@@ -193,14 +197,7 @@ export const Create: React.FC = () => {
 							Upload a cover image for the book
 						</div>
 						<ImageInput value={cover} onChange={(file) => setCover(file)} />
-						<div
-							className="poppins-semibold"
-							style={{
-								fontSize: '22px',
-							}}
-						>
-							Author’s section
-						</div>
+						<div className="author-section poppins-semibold">Author’s section</div>
 						<Select
 							mode="multiple"
 							allowClear
@@ -213,14 +210,7 @@ export const Create: React.FC = () => {
 								(option?.label?.toLowerCase().indexOf(input.toLowerCase()) ?? -1) >= 0
 							}
 						/>
-						<div
-							className="poppins-regular"
-							style={{
-								fontSize: '18px',
-							}}
-						>
-							Add new author
-						</div>
+						<div className="add-new-author-label poppins-regular">Add new author</div>
 
 						<CreateAuthorForm>
 							<div>
@@ -229,7 +219,7 @@ export const Create: React.FC = () => {
 							</div>
 							<OutlinedButton text="Add author" />
 						</CreateAuthorForm>
-					<AscentButton text="Send book to review" />
+						<AscentButton text="Send book to review" />
 					</CreateBookForm>
 				</Wrapper>
 			</main>
