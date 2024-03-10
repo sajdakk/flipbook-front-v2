@@ -1,14 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../../styles/colors';
-import { PrimaryButton, SecondaryButton, Logo, AscentButton } from '../../components';
 import { Header } from '../../components/header';
 import { Input } from 'antd';
 import { BookCard } from '../../components/book-card';
+import { AscentButton } from '../../components';
 
 export const Wrapper = styled.div`
-	padding-left: 200px;
-	padding-right: 200px;
 	padding-bottom: 24px;
 	display: flex;
 	flex-direction: column;
@@ -16,18 +13,25 @@ export const Wrapper = styled.div`
 	justify-content: stretch;
 	align-items: stretch;
 	width: 100%;
+	max-width: 850px;
+	padding-bottom: 24px;
 	box-sizing: border-box;
 
 	.header {
 		color: #000;
 		font-size: 24px;
 		padding-bottom: 24px;
-		align-items: center;
 		padding-top: 24px;
+		align-self: center;
 	}
 
 	> :first-child {
 		align-items: start;
+		display: flex;
+		flex-direction: column;
+		padding-left: 24px;
+		padding-right: 24px;
+		box-sizing: border-box;
 	}
 `;
 

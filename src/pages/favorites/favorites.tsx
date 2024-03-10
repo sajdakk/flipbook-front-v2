@@ -34,13 +34,13 @@ const BookList = styled.div`
 	box-sizing: border-box;
 `;
 
-export const Top: React.FC = () => {
+export const Favorites: React.FC = () => {
 	return (
 		<>
 			<Header></Header>
 			<main>
 				<Wrapper>
-					<div className="poppins-semibold header">Top of the top</div>
+					<div className="poppins-semibold header">Favorites</div>
 
 					<BookList>
 						{Array.from({ length: 5 }).map((_, index) => (
