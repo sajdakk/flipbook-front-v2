@@ -30,14 +30,17 @@ const Wrapper = styled.div`
 `;
 
 interface Props {
-	text: string;
+	children: string;
 	className?: string;
+	onClick?: () => void;
 }
 
-export const AscentButton: React.FC<Props> = ({ text, className }: Props) => {
+export const AscentButton: React.FC<Props> = ({ children, className, onClick }: Props) => {
 	return (
 		<Wrapper className={className}>
-			<button className="poppins-regular">{text}</button>
+			<button className="poppins-regular" onClick={onClick}>
+				{children}
+			</button>
 		</Wrapper>
 	);
 };

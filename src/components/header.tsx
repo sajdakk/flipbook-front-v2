@@ -4,7 +4,7 @@ import { FormOutlined, HeartFilled } from '@ant-design/icons';
 import { SmallLogo, PrimaryButton, SecondaryButton } from '.';
 import { colors } from '../styles/colors';
 import { MobileHeader } from './mobile_header';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Space } from 'antd';
 
 const Menu = styled.nav`
@@ -107,51 +107,51 @@ export const Header: React.FC = () => {
 				<SmallLogo />
 				<ul>
 					<li>
-						<a
+						<Link
+							to="/"
 							className={`${window.location.href.endsWith('/') ? `inter-regular selected` : `inter-regular `}`}
-							href="/"
 						>
 							Home
-						</a>
+						</Link>
 					</li>
 					<li>
-						<a
+						<Link
+							to="/top"
 							className={`${window.location.href.endsWith('/top') ? `inter-regular selected` : `inter-regular `}`}
-							href="/top"
 						>
 							Top
-						</a>
+						</Link>
 					</li>
 					<li>
-						<a
+						<Link
+							to="/profile"
 							className={`${window.location.href.endsWith('/profile') ? `inter-regular selected` : `inter-regular `}`}
-							href="/profile"
 						>
 							Profile
-						</a>
+						</Link>
 					</li>
 					<li>
-						<a
+						<Link
+							to="/"
 							className={`${window.location.href.endsWith('/admin') ? `inter-regular selected` : `inter-regular `}`}
-							href="/"
 						>
 							Admin
-						</a>
+						</Link>
 					</li>
 				</ul>
 			</Space>
 			<Space size={16}>
 				<TextButton>
 					<FormOutlined style={{ color: colors.primary }} />
-					<a className="inter-regular" href="/create">
+					<Link className="inter-regular" to="/create">
 						Create book
-					</a>
+					</Link>
 				</TextButton>
 				<TextButton>
 					<HeartFilled style={{ color: colors.primary }} />
-					<a className="inter-regular" href="/favorites">
+					<Link className="inter-regular" to="/favorites">
 						Favorites
-					</a>
+					</Link>
 				</TextButton>
 				<PrimaryButton onClick={() => navigate('/login')} text="Log in" />
 				<SecondaryButton onClick={() => navigate('/register')} text="Sign up" />

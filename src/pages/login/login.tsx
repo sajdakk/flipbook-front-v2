@@ -5,6 +5,7 @@ import { Logo, AscentButton } from '../../components';
 import { Header } from '../../components/header';
 import { Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useLogin } from './use_login';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -75,8 +76,7 @@ const QuestionRow = styled.div`
 		color: ${() => colors.primary};
 		font-size: 16px;
 		cursor: pointer;
-    white-space: nowrap;
-
+		white-space: nowrap;
 	}
 
 	@media screen and (max-width: 780px) {
@@ -88,32 +88,47 @@ const QuestionRow = styled.div`
 
 export const Login: React.FC = () => {
 	const navigate = useNavigate();
+	const { loginWithPassword } = useLogin();
+
+	const [email, setEmail] = React.useState<string>('');
+	const [password, setPassword] = React.useState<string>('');
+
+	const onSubmit = (e: React.FormEvent<HTMLElement>) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		loginWithPassword(email, password);
+	};
 
 	return (
 		<>
-			<Header></Header>
-			<main>
-				<Wrapper>
-					<LoginContainer>
-						<Logo className="logo"></Logo>
-						<div className="poppins-medium" style={{ fontSize: '24px', color: 'black' }}>
-							Log in
-						</div>
-						<div className="inputs">
-							<Input placeholder="E-mail" />
-							<Input.Password placeholder="Password" />
-						</div>
-
-						<AscentButton className="button" text="Sign in"></AscentButton>
-						<QuestionRow>
-							<div className="poppins-regular">You don't have an account?</div>
-							<div className="link poppins-regular" onClick={() => navigate('/register')}>
-								Sign Up
+			<form onSubmit={onSubmit}>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<LoginContainer>
+							<Logo className="logo"></Logo>
+							<div className="poppins-medium" style={{ fontSize: '24px', color: 'black' }}>
+								Log in
 							</div>
-						</QuestionRow>
-					</LoginContainer>
-				</Wrapper>
-			</main>
+							<div className="inputs">
+								<Input placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+								<Input.Password placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+							</div>
+
+							<AscentButton className="button" onClick={() => loginWithPassword(email, password)}>
+								Sign in
+							</AscentButton>
+							<QuestionRow>
+								<div className="poppins-regular">You don't have an account?</div>
+								<div className="link poppins-regular" onClick={() => navigate('/register')}>
+									Sign Up
+								</div>
+							</QuestionRow>
+						</LoginContainer>
+					</Wrapper>
+				</main>
+			</form>
 		</>
 	);
 };

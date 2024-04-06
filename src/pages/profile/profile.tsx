@@ -5,6 +5,7 @@ import { AvatarInput } from '../../components/avatar_input';
 import { EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { colors } from '../../styles/colors';
 import { ProfileReviewCard } from '../../components/profile-review-card';
+import { useSessionManager } from '../../utils/current_user_provider';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -74,7 +75,14 @@ const RoundedIcon = styled.div`
 `;
 
 export const Profile: React.FC = () => {
+	const sessionManager = useSessionManager();
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
+
+	const currentUser = sessionManager.currentUser;
+
+	if (!currentUser) {
+		return <div>Zaloguj się</div>;
+	}
 
 	return (
 		<>
@@ -83,7 +91,7 @@ export const Profile: React.FC = () => {
 				<Wrapper>
 					<AvatarInput initialValue={null} />
 
-					<div className="poppins-semibold header">Hello, Anita</div>
+					<div className="poppins-semibold header">Hello, {currentUser.name}</div>
 					<Menu>
 						<MenuSelector id="review-menu" onClick={(_) => setSelectedMenu(0)}>
 							<RoundedIcon
