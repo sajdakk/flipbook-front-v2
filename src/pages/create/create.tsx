@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Header } from '../../components/header';
+import { Header } from '../../components/header/header';
 import { BookCard } from '../../components/book-card';
 import {
 	Button,
@@ -24,6 +24,7 @@ import { colors } from '../../styles/colors';
 import { ImageInput } from '../../components/image_input';
 import { OutlinedButton } from '../../components/outlined-button';
 import { AscentButton } from '../../components';
+import { useCreate } from './use_create';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -113,6 +114,20 @@ export const Create: React.FC = () => {
 	const [selectedLanguageIds, setSelectedLanguageIds] = useState<number[]>([]);
 	const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
 	const [cover, setCover] = useState<File | null>(null);
+	const { user } = useCreate();
+
+	if (!user) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<div className="poppins-semibold header">You have to log in to create a book</div>
+					</Wrapper>
+				</main>
+			</>
+		);
+	}
 
 	const items: DefaultOptionType['items'] = [
 		{
@@ -219,7 +234,7 @@ export const Create: React.FC = () => {
 							</div>
 							<OutlinedButton text="Add author" />
 						</CreateAuthorForm>
-						<AscentButton text="Send book to review" />
+						<AscentButton>Send book to review</AscentButton>
 					</CreateBookForm>
 				</Wrapper>
 			</main>

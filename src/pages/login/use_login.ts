@@ -1,33 +1,46 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { API } from '../../utils/api';
 import { useSessionManager } from '../../utils/current_user_provider';
+import { message } from 'antd';
 
 export const useLogin = () => {
 	const navigate = useNavigate();
 	const sessionManager = useSessionManager();
 
 	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>();
+	const [searchParams, _] = useSearchParams();
+	const rawLogoutParam = searchParams.get('logout');
+	const logoutParam = useMemo(() => {
+		if (!rawLogoutParam) {
+			return null;
+		}
+
+		const parsed = parseInt(rawLogoutParam);
+		if (isNaN(parsed)) {
+			return null;
+		}
+
+		return parsed;
+	}, [rawLogoutParam]);
+
+	if (logoutParam === 1) {
+		message.info('You have been logged out');
+	}
 
 	const loginWithPassword = async (email: string, password: string) => {
-		if (!email.trim()) return setError('Podaj login');
-		if (!password.trim()) return setError('Podaj hasło');
-
 		try {
 			setLoading(true);
 			const response = await API().login(email, password);
 			setLoading(false);
 
 			sessionManager.setCurrentUserId(response.data.id);
-			navigate('/dashboard');
+			navigate('/');
 		} catch (error) {
 			setLoading(false);
-			console.trace(error);
-
-			setError('Niepoprawne dane logowania');
+			message.error(error.response.data.message);
 		}
 	};
 
-	return { loading, error, loginWithPassword };
+	return { loading, loginWithPassword };
 };

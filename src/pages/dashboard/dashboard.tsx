@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Header } from '../../components/header';
+import { Header } from '../../components/header/header';
 import { Input } from 'antd';
 import { BookCard } from '../../components/book-card';
 import { AscentButton } from '../../components';
@@ -102,7 +102,7 @@ export const Dashboard: React.FC = () => {
 
 							<Input className="name-input" placeholder="Author's name" />
 							<Input className="surname-input" placeholder="Author's surname" />
-							<AscentButton text="Search" />
+							<AscentButton>Search</AscentButton>
 						</HeaderForm>
 					</div>
 

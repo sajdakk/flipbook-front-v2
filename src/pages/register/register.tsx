@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles/colors';
 import { Logo, AscentButton } from '../../components';
 import { Header } from '../../components/header';
-import { Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useRegister } from './use_register';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -43,8 +44,14 @@ export const RegisterContainer = styled.div`
 	.inputs {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
 		width: 100%;
+
+		> p.error {
+			height: 21px;
+			margin: 0px;
+
+			color: ${() => colors.statusDanger};
+		}
 	}
 
 	> .button {
@@ -62,6 +69,10 @@ export const RegisterContainer = styled.div`
 		color: ${() => colors.primary};
 		font-size: 16px;
 		cursor: pointer;
+	}
+
+	> .ant-form-item {
+		width: 100%;
 	}
 
 	@media screen and (max-width: 780px) {
@@ -88,7 +99,7 @@ const QuestionRow = styled.div`
 		color: ${() => colors.primary};
 		font-size: 16px;
 		cursor: pointer;
-    white-space: nowrap;
+		white-space: nowrap;
 	}
 
 	@media screen and (max-width: 780px) {
@@ -100,36 +111,158 @@ const QuestionRow = styled.div`
 
 export const Register: React.FC = () => {
 	const navigate = useNavigate();
+	const [form] = Form.useForm();
+	const { loading, register } = useRegister();
+
+	const _onSubmit = (_: any) => {
+		form
+			.validateFields()
+			.then((value) => {
+				register({
+					email: value.email,
+					password: value.password,
+					name: value.name.trim(),
+					surname: value.surname.trim(),
+				});
+			})
+			.catch((_) => {});
+	};
+
+	useEffect(() => {
+		const emailInput = document.querySelector('#email');
+		emailInput?.setAttribute('placeholder', 'E-mail');
+
+		const nameInput = document.querySelector('#name');
+		nameInput?.setAttribute('placeholder', 'Name');
+
+		const surnameInput = document.querySelector('#surname');
+		surnameInput?.setAttribute('placeholder', 'Surname');
+
+		const passwordInput = document.querySelector('#password');
+		passwordInput?.setAttribute('placeholder', 'Password');
+
+		const repeatPasswordInput = document.querySelector('#repeatPassword');
+		repeatPasswordInput?.setAttribute('placeholder', 'Repeat password');
+	});
 
 	return (
 		<>
-			<Header></Header>
-			<main>
-				<Wrapper>
-					<RegisterContainer>
-						<Logo className="logo"></Logo>
-						<div className="poppins-medium" style={{ fontSize: '24px', color: 'black' }}>
-							Sign up
-						</div>
-						<div className="inputs">
-							<Input placeholder="E-mail" />
-
-							<Input placeholder="Name" />
-							<Input placeholder="Surname" />
-							<Input.Password placeholder="Password" />
-							<Input.Password placeholder="Repeat password" />
-						</div>
-
-						<AscentButton className="button" text="Sign in"></AscentButton>
-						<QuestionRow>
-							<div className="poppins-regular">Do you already have an account?</div>
-							<div className="link poppins-regular" onClick={() => navigate('/login')}>
-								Log in
+			<Form onFinish={_onSubmit} scrollToFirstError form={form}>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<RegisterContainer>
+							<Logo className="logo"></Logo>
+							<div className="poppins-medium" style={{ fontSize: '24px', color: 'black' }}>
+								Sign up
 							</div>
-						</QuestionRow>
-					</RegisterContainer>
-				</Wrapper>
-			</main>
+							<div className="inputs">
+								<Form.Item
+									name="email"
+									rules={[
+										{
+											type: 'email',
+											message: 'The input is not valid E-mail!',
+										},
+										{
+											required: true,
+											message: 'Please input your E-mail!',
+										},
+									]}
+								>
+									<Input />
+								</Form.Item>
+								<Form.Item
+									name="name"
+									validateFirst={true}
+									rules={[
+										{
+											required: true,
+											message: 'Please input your name!',
+										},
+										() => ({
+											validator(_, value) {
+												const trimmed = value?.trim();
+												if (!trimmed && trimmed?.length > 0) {
+													return Promise.resolve();
+												}
+												return Promise.reject(new Error('The name that you entered is not valid!'));
+											},
+										}),
+									]}
+								>
+									<Input />
+								</Form.Item>
+								<Form.Item
+									name="surname"
+									rules={[
+										{
+											required: true,
+											message: 'Please input your surname!',
+										},
+										() => ({
+											validator(_, value) {
+												const trimmed = value?.trim();
+												if (!trimmed && trimmed?.length > 0) {
+													return Promise.resolve();
+												}
+												return Promise.reject(new Error('The surname that you entered is not valid!'));
+											},
+										}),
+									]}
+								>
+									<Input />
+								</Form.Item>
+
+								<Form.Item
+									name="password"
+									rules={[
+										{
+											required: true,
+											message: 'Please input your password!',
+										},
+									]}
+								>
+									<Input.Password />
+								</Form.Item>
+								<Form.Item
+									name="repeatPassword"
+									dependencies={['password']}
+									rules={[
+										{
+											required: true,
+											message: 'Please input your password!',
+										},
+										({ getFieldValue }) => ({
+											validator(_, value) {
+												if (!value || getFieldValue('password') === value) {
+													return Promise.resolve();
+												}
+												return Promise.reject(new Error('The new password that you entered do not match!'));
+											},
+										}),
+									]}
+								>
+									<Input.Password />
+								</Form.Item>
+							</div>
+
+							<Form.Item>
+								<AscentButton className="button" loading={loading} htmlType="submit">
+									Sign in
+								</AscentButton>
+							</Form.Item>
+
+							<QuestionRow>
+								<div className="poppins-regular">Do you already have an account?</div>
+								<div className="link poppins-regular" onClick={() => navigate('/login')}>
+									Log in
+								</div>
+							</QuestionRow>
+						</RegisterContainer>
+					</Wrapper>
+				</main>
+			</Form>
 		</>
 	);
 };

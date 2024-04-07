@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { User } from '../types';
 
-export interface AddProductGroupDto {
-	name: string;
-	cover: string;
-	coverExtension: string;
+export interface RegisterDto {
+	email: String;
+	name: String;
+	surname: String;
+	password: String;
 }
 
 export const API = () => {
@@ -27,6 +28,17 @@ export const API = () => {
 					email,
 					password,
 				},
+			}).catch((error) => {
+				throw error;
+			});
+		},
+
+		register: async (data: RegisterDto) => {
+			return client<User>('/register', {
+				method: 'POST',
+				data,
+			}).catch((error) => {
+				throw error;
 			});
 		},
 
@@ -34,6 +46,8 @@ export const API = () => {
 			get: async () => {
 				return client<User>(`/users/${id}`, {
 					method: 'GET',
+				}).catch((error) => {
+					throw error;
 				});
 			},
 		}),

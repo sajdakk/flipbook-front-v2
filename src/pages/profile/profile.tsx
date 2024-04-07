@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Header } from '../../components/header';
+import { Header } from '../../components/header/header';
 import { AvatarInput } from '../../components/avatar_input';
 import { EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { colors } from '../../styles/colors';
 import { ProfileReviewCard } from '../../components/profile-review-card';
 import { useSessionManager } from '../../utils/current_user_provider';
+import { useProfile } from './use_profile';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -75,13 +76,20 @@ const RoundedIcon = styled.div`
 `;
 
 export const Profile: React.FC = () => {
-	const sessionManager = useSessionManager();
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
+	const { user } = useProfile();
 
-	const currentUser = sessionManager.currentUser;
-
-	if (!currentUser) {
-		return <div>Zaloguj się</div>;
+	if (!user) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<div className="poppins-semibold header">You have to log in to see your profile</div>
+					</Wrapper>
+				</main>
+			</>
+		);
 	}
 
 	return (
@@ -91,7 +99,7 @@ export const Profile: React.FC = () => {
 				<Wrapper>
 					<AvatarInput initialValue={null} />
 
-					<div className="poppins-semibold header">Hello, {currentUser.name}</div>
+					<div className="poppins-semibold header">Hello, {user.name}</div>
 					<Menu>
 						<MenuSelector id="review-menu" onClick={(_) => setSelectedMenu(0)}>
 							<RoundedIcon

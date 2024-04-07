@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Header } from '../../components/header';
+import { Header } from '../../components/header/header';
 import { BookCard } from '../../components/book-card';
+import { useFavorites } from './use_favorites';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -41,6 +42,21 @@ const BookList = styled.div`
 `;
 
 export const Favorites: React.FC = () => {
+	const { user } = useFavorites();
+
+	if (!user) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<div className="poppins-semibold header">You have to log in to see your favorites</div>
+					</Wrapper>
+				</main>
+			</>
+		);
+	}
+
 	return (
 		<>
 			<Header></Header>

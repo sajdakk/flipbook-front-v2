@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles/colors';
 import { Logo, AscentButton } from '../../components';
-import { Header } from '../../components/header';
-import { Input } from 'antd';
+import { Header } from '../../components/header/header';
+import { Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useLogin } from './use_login';
 
@@ -44,12 +44,22 @@ export const LoginContainer = styled.div`
 	.inputs {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
 		width: 100%;
+
+		> p.error {
+			height: 21px;
+			margin: 0px;
+
+			color: ${() => colors.statusDanger};
+		}
 	}
 
 	> .button {
 		align-self: stretch;
+	}
+
+	> .ant-form-item {
+		width: 100%;
 	}
 
 	@media screen and (max-width: 780px) {
@@ -88,21 +98,30 @@ const QuestionRow = styled.div`
 
 export const Login: React.FC = () => {
 	const navigate = useNavigate();
-	const { loginWithPassword } = useLogin();
+	const [form] = Form.useForm();
 
-	const [email, setEmail] = React.useState<string>('');
-	const [password, setPassword] = React.useState<string>('');
+	const { loading, loginWithPassword } = useLogin();
 
-	const onSubmit = (e: React.FormEvent<HTMLElement>) => {
-		e.preventDefault();
-		e.stopPropagation();
-
-		loginWithPassword(email, password);
+	const _onSubmit = (e: any) => {
+		form
+			.validateFields()
+			.then((value) => {
+				loginWithPassword(value.email, value.password);
+			})
+			.catch((_) => {});
 	};
+
+	useEffect(() => {
+		const emailInput = document.querySelector('#email');
+		emailInput?.setAttribute('placeholder', 'E-mail');
+
+		const passwordInput = document.querySelector('#password');
+		passwordInput?.setAttribute('placeholder', 'Password');
+	});
 
 	return (
 		<>
-			<form onSubmit={onSubmit}>
+			<Form onFinish={_onSubmit} scrollToFirstError form={form}>
 				<Header></Header>
 				<main>
 					<Wrapper>
@@ -112,13 +131,38 @@ export const Login: React.FC = () => {
 								Log in
 							</div>
 							<div className="inputs">
-								<Input placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
-								<Input.Password placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+								<Form.Item
+									name="email"
+									rules={[
+										{
+											type: 'email',
+											message: 'The input is not valid E-mail!',
+										},
+										{
+											required: true,
+											message: 'Please input your E-mail!',
+										},
+									]}
+								>
+									<Input />
+								</Form.Item>
+								<Form.Item
+									name="password"
+									rules={[
+										{
+											required: true,
+											message: 'Please input your password!',
+										},
+									]}
+								>
+									<Input.Password />
+								</Form.Item>
 							</div>
-
-							<AscentButton className="button" onClick={() => loginWithPassword(email, password)}>
-								Sign in
-							</AscentButton>
+							<Form.Item>
+								<AscentButton className="button" loading={loading} htmlType="submit">
+									Log in
+								</AscentButton>
+							</Form.Item>
 							<QuestionRow>
 								<div className="poppins-regular">You don't have an account?</div>
 								<div className="link poppins-regular" onClick={() => navigate('/register')}>
@@ -128,7 +172,7 @@ export const Login: React.FC = () => {
 						</LoginContainer>
 					</Wrapper>
 				</main>
-			</form>
+			</Form>
 		</>
 	);
 };
