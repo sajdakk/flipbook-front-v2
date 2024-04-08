@@ -1,11 +1,21 @@
 import axios from 'axios';
-import { User } from '../types';
+import { Book, User } from '../types';
 
 export interface RegisterDto {
-	email: String;
-	name: String;
-	surname: String;
-	password: String;
+	email: string;
+	name: string;
+	surname: string;
+	password: string;
+}
+
+export interface SearchDto {
+	title: string;
+	name: string;
+	surname: string;
+}
+
+export const getFileUrl = (file: string) => {
+	return `${process.env['API']}/uploads/${file}`;
 }
 
 export const API = () => {
@@ -28,8 +38,6 @@ export const API = () => {
 					email,
 					password,
 				},
-			}).catch((error) => {
-				throw error;
 			});
 		},
 
@@ -37,8 +45,12 @@ export const API = () => {
 			return client<User>('/register', {
 				method: 'POST',
 				data,
-			}).catch((error) => {
-				throw error;
+			});
+		},
+
+		logout: async () => {
+			return client('/logout', {
+				method: 'POST',
 			});
 		},
 
@@ -46,6 +58,36 @@ export const API = () => {
 			get: async () => {
 				return client<User>(`/users/${id}`, {
 					method: 'GET',
+				}).catch((error) => {
+					throw error;
+				});
+			},
+		}),
+
+		books: () => ({
+			get: async () => {
+				return client<Book[]>('/books', {
+					method: 'GET',
+				}).catch((error) => {
+					throw error;
+				});
+			},
+
+			top: async (limit?: number | undefined) => {
+				return client<Book[]>('/books/top', {
+					method: 'GET',
+					params: {
+						limit,
+					},
+				}).catch((error) => {
+					throw error;
+				});
+			},
+
+			search: async (data: SearchDto) => {
+				return client<Book[]>('/books/search', {
+					method: 'POST',
+					data,
 				}).catch((error) => {
 					throw error;
 				});

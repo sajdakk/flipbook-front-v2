@@ -4,3 +4,4 @@ export * from './secondary-button';
 export * from './ascent-button';
 export * from './logo';
 export * from './header/index';
+export * from './danger-button';

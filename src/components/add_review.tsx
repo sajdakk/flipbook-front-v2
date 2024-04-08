@@ -140,7 +140,7 @@ export const AddReview: React.FC = () => {
 						</div>
 					</div>
 
-					<AscentButton text="Sent to review" />
+					<AscentButton>Sent to review</AscentButton>
 				</ReviewForm>
 			</div>
 		</Wrapper>

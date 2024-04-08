@@ -128,7 +128,7 @@ export const Header: React.FC = () => {
 
 						<li>
 							<Link
-								to="/"
+								to="/admin"
 								className={`${window.location.href.endsWith('/admin') ? `inter-regular selected` : `inter-regular `}`}
 							>
 								Admin
@@ -190,7 +190,7 @@ export const Header: React.FC = () => {
 					</li>
 					<li>
 						<Link
-							to="/"
+							to="/admin"
 							className={`${window.location.href.endsWith('/admin') ? `inter-regular selected` : `inter-regular `}`}
 						>
 							Admin

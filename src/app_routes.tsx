@@ -7,6 +7,7 @@ import { Favorites } from './pages/favorites/favorites';
 import { Create } from './pages/create/create';
 import { Profile } from './pages/profile/profile';
 import { Details } from './pages/details/details';
+import { Admin } from './pages/admin/admin';
 
 export const AppRoutes: React.FC = () => {
 	return (
@@ -18,6 +19,7 @@ export const AppRoutes: React.FC = () => {
 			<Route path="favorites" element={<Favorites />} />
 			<Route path="create" element={<Create />} />
 			<Route path="profile" element={<Profile />} />
+			<Route path="admin" element={<Admin />} />
 			<Route path="books/:id" element={<Details />} />
 		</Routes>
 	);

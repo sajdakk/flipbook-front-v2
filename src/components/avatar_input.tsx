@@ -13,7 +13,7 @@ const UploadWrapper = styled.div`
 `;
 
 interface Props {
-	initialValue: String | null;
+	initialValue: string | null;
 }
 
 

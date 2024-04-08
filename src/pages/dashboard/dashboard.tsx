@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Header } from '../../components/header/header';
-import { Input } from 'antd';
+import { Input, Skeleton } from 'antd';
 import { BookCard } from '../../components/book-card';
 import { AscentButton } from '../../components';
+import { useDashboard } from './use_dashboard';
+import { Content } from './components/content';
 
 export const Wrapper = styled.div`
 	padding-bottom: 24px;
@@ -38,7 +40,7 @@ export const Wrapper = styled.div`
 			font-size: 20px;
 		}
 
-		main{
+		main {
 			padding-top: 0px;
 		}
 	}
@@ -68,27 +70,32 @@ const HeaderForm = styled.form`
 	}
 `;
 
-const BookList = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
-	justify-content: center;
-	flex-direction: row;
-	align-self: center;
-	width: 100%;
-	padding-left: 24px;
-	padding-right: 24px;
-	box-sizing: border-box;
-`;
-
-const Content = styled.div`
-	padding-top: 24px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`;
-
 export const Dashboard: React.FC = () => {
+	const { mayInterestYou, filteredBooks, loading, search } = useDashboard();
+	const [title, setTitle] = useState('');
+	const [name, setName] = useState('');
+	const [surname, setSurname] = useState('');
+
+	if (mayInterestYou === undefined || loading) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<Skeleton active />
+					</Wrapper>
+				</main>
+			</>
+		);
+	}
+
+	const _submit = (e: any) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		search({ title, name, surname });
+	};
+
 	return (
 		<>
 			<Header></Header>
@@ -98,22 +105,30 @@ export const Dashboard: React.FC = () => {
 						<div className="poppins-semibold header">What can I find for you?</div>
 
 						<HeaderForm>
-							<Input className="title-input" placeholder="Title" />
+							<Input
+								className="title-input"
+								placeholder="Title"
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+							/>
 
-							<Input className="name-input" placeholder="Author's name" />
-							<Input className="surname-input" placeholder="Author's surname" />
-							<AscentButton>Search</AscentButton>
+							<Input
+								className="name-input"
+								placeholder="Author's name"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+							/>
+							<Input
+								className="surname-input"
+								placeholder="Author's surname"
+								value={surname}
+								onChange={(e) => setSurname(e.target.value)}
+							/>
+							<AscentButton onClick={_submit}>Search</AscentButton>
 						</HeaderForm>
 					</div>
 
-					<Content>
-						<div className="poppins-semibold header">May interest you</div>
-						<BookList>
-							{Array.from({ length: 5 }).map((_, index) => (
-								<BookCard key={index}></BookCard>
-							))}
-						</BookList>
-					</Content>
+					<Content mayInterestYou={mayInterestYou} filteredBooks={filteredBooks}></Content>
 				</Wrapper>
 			</main>
 		</>

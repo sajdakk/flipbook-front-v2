@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { API } from '../../utils/api';
-import { useSessionManager } from '../../utils/current_user_provider';
+import { useSessionManager } from '../../utils/session_provider';
 import { message } from 'antd';
 
 export const useLogin = () => {
@@ -24,9 +24,11 @@ export const useLogin = () => {
 		return parsed;
 	}, [rawLogoutParam]);
 
-	if (logoutParam === 1) {
-		message.info('You have been logged out');
-	}
+	useEffect(() => {
+		if (logoutParam === 1) {
+			message.info('You have been logged out');
+		}
+	}, [logoutParam]);
 
 	const loginWithPassword = async (email: string, password: string) => {
 		try {
@@ -34,7 +36,7 @@ export const useLogin = () => {
 			const response = await API().login(email, password);
 			setLoading(false);
 
-			sessionManager.setCurrentUserId(response.data.id);
+			sessionManager.setCurrentUser(response.data);
 			navigate('/');
 		} catch (error) {
 			setLoading(false);

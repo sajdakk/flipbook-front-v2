@@ -5,8 +5,8 @@ import { AvatarInput } from '../../components/avatar_input';
 import { EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { colors } from '../../styles/colors';
 import { ProfileReviewCard } from '../../components/profile-review-card';
-import { useSessionManager } from '../../utils/session_provider';
-import { useProfile } from './use_profile';
+import { useAdmin } from './use_admin';
+import { AdminReviewCard } from '../../components/admin/admin-review-card';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -75,17 +75,17 @@ const RoundedIcon = styled.div`
 	border: 1px solid ${() => colors.ascentShade};
 `;
 
-export const Profile: React.FC = () => {
+export const Admin: React.FC = () => {
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
-	const { user } = useProfile();
+	const { user } = useAdmin();
 
-	if (!user) {
+	if (!user || user.role.id !== 3) {
 		return (
 			<>
 				<Header></Header>
 				<main>
 					<Wrapper>
-						<div className="poppins-semibold header">You have to log in to see your profile</div>
+						<div className="poppins-semibold header">You have to be admin to see this page</div>
 					</Wrapper>
 				</main>
 			</>
@@ -97,9 +97,6 @@ export const Profile: React.FC = () => {
 			<Header></Header>
 			<main>
 				<Wrapper>
-					<AvatarInput initialValue={null} />
-
-					<div className="poppins-semibold header">Hello, {user.name}</div>
 					<Menu>
 						<MenuSelector id="review-menu" onClick={(_) => setSelectedMenu(0)}>
 							<RoundedIcon
@@ -121,7 +118,7 @@ export const Profile: React.FC = () => {
 									fontSize: '12px',
 								}}
 							>
-								Your reviews
+								Awaiting reviews
 							</div>
 						</MenuSelector>
 
@@ -145,7 +142,7 @@ export const Profile: React.FC = () => {
 									fontSize: '12px',
 								}}
 							>
-								Your books
+								Awaiting books
 							</div>
 						</MenuSelector>
 					</Menu>
@@ -162,7 +159,7 @@ export const Profile: React.FC = () => {
 						}
 					>
 						{Array.from({ length: 5 }).map((_, index) => (
-							<ProfileReviewCard key={index}></ProfileReviewCard>
+							<AdminReviewCard key={index}></AdminReviewCard>
 						))}
 					</ItemList>
 					<ItemList
@@ -177,7 +174,7 @@ export const Profile: React.FC = () => {
 						}
 					>
 						{Array.from({ length: 2 }).map((_, index) => (
-							<ProfileReviewCard key={index}></ProfileReviewCard>
+							<AdminReviewCard key={index}></AdminReviewCard>
 						))}
 					</ItemList>
 				</Wrapper>

@@ -1,21 +1,12 @@
 import { useState, useEffect } from 'react';
 import { User } from '../../types';
-import { useSessionManager } from '../../utils/current_user_provider';
+import { useSessionManager } from '../../utils/session_provider';
+import { API } from '../../utils/api';
 
 export const useHeader = () => {
-	const [user, setUser] = useState<User | undefined>(undefined);
 	const sessionManager = useSessionManager();
 
-	useEffect(() => {
-		fetchData();
-	}, [user]);
+	const logout = () => sessionManager.logout();
 
-	const fetchData = async () => {
-		setUser(sessionManager.currentUser);
-	};
-
-    const logout = async () => {
-    };
-
-	return { user, logout };
+	return { user: sessionManager.currentUser, logout };
 };

@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { User } from '../../types';
 import { useSessionManager } from '../../utils/session_provider';
 
-export const useFavorites = () => {
-	const [user, setUser] = useState<User | undefined>(undefined);
+export const useAdmin = () => {
 	const sessionManager = useSessionManager();
 
 	useEffect(() => {
 		fetchData();
-	}, [user]);
+	}, []);
 
 	const fetchData = async () => {
-		setUser(sessionManager.currentUser);
+		
 	};
 
-	return { user };
+	return { user:sessionManager.currentUser };
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { User } from '../../types';
-import { useSessionManager } from '../../utils/current_user_provider';
+import { useSessionManager } from '../../utils/session_provider';
 
 export const useCreate = () => {
 	const [user, setUser] = useState<User | undefined>(undefined);

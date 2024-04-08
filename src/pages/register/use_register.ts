@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { API, RegisterDto } from '../../utils/api';
-import { useSessionManager } from '../../utils/current_user_provider';
+import { useSessionManager } from '../../utils/session_provider';
 import { useState } from 'react';
 import { message } from 'antd';
 
@@ -15,7 +15,7 @@ export const useRegister = () => {
 			setLoading(true);
 			const response = await API().register(dto);
 			setLoading(false);
-			sessionManager.setCurrentUserId(response.data.id);
+			sessionManager.setCurrentUser(response.data);
 			navigate('/');
 		} catch (error) {
 			setLoading(false);

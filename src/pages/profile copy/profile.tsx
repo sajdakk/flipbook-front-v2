@@ -145,7 +145,7 @@ export const Profile: React.FC = () => {
 									fontSize: '12px',
 								}}
 							>
-								Your books
+								Your reviews
 							</div>
 						</MenuSelector>
 					</Menu>

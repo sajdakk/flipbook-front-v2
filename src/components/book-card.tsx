@@ -3,6 +3,8 @@ import { styled } from 'styled-components';
 import { colors } from '../styles/colors';
 import { HeartFilled, StarOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { Book, ReviewForBook } from '..';
+import { API, getFileUrl } from '../utils/api';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -85,24 +87,35 @@ const CardHeader = styled.div`
 	}
 `;
 
-export const BookCard: React.FC = () => {
+interface Props {
+	book: Book;
+}
+
+export const BookCard: React.FC<Props> = ({ book }: Props) => {
 	const navigate = useNavigate();
+
+	const _getRate = (reviews: ReviewForBook[]) => {
+		if (reviews.length === 0) {
+			return 0;
+		}
+		let sum = 0;
+		reviews.forEach((review) => (sum += review.rate));
+		return (sum / reviews.length).toPrecision(2);
+	};
+
 	return (
-		<Wrapper onClick={() => navigate('/books/4')}>
-			<img
-				className="news-image"
-				src="https://i.guim.co.uk/img/media/423d3ddf306e98864c1d887c1dcf290421cd21a7/0_169_4912_6140/master/4912.jpg?width=700&quality=85&auto=format&fit=max&s=864393ed1c322fc5ddcb2766c3c945e6"
-			/>
+		<Wrapper onClick={() => navigate(`/books/${book.id}`)}>
+			<img className="news-image" src={getFileUrl(book.image)} />
 			<div className="news-description">
 				<CardHeader>
 					<div className="title">
 						<div className="inter-semibold" style={{ color: colors.text2 }}>
-							Harry Potter and the philosopher's stone
+							{book.title}
 						</div>
 						<HeartFilled className="heart" style={{ color: colors.ascent, cursor: 'pointer' }} />
 					</div>
 					<div className="inter-regular" style={{ fontSize: '10px', color: colors.text3 }}>
-						Rowling, J. K.
+						{book.authors.map((author) => `${author.name} ${author.surname}`).join(', ')}
 					</div>
 				</CardHeader>
 				<div className="extra-info">
@@ -110,11 +123,11 @@ export const BookCard: React.FC = () => {
 						<StarOutlined style={{ color: colors.ascent }} />
 
 						<div className="inter-light" style={{ fontSize: '12px', color: colors.text3 }}>
-							4.5 / 5
+							{_getRate(book.reviews)} / 5
 						</div>
 					</Score>
 					<div className="inter-extralight" style={{ fontSize: '12px', color: colors.text3 }}>
-						104 reviews
+						{book.reviews.length} {book.reviews.length == 1 ? 'review' : 'reviews'}
 					</div>
 				</div>
 			</div>

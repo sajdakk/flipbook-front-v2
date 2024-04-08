@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Header } from '../../components/header';
 import { BookCard } from '../../components/book-card';
+import { useTop } from './use_top';
+import { Skeleton } from 'antd';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -41,6 +43,20 @@ const BookList = styled.div`
 `;
 
 export const Top: React.FC = () => {
+	const { books } = useTop();
+	if (books === undefined) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<Skeleton active />
+					</Wrapper>
+				</main>
+			</>
+		);
+	}
+
 	return (
 		<>
 			<Header></Header>
@@ -49,8 +65,8 @@ export const Top: React.FC = () => {
 					<div className="poppins-semibold header">Top of the top</div>
 
 					<BookList>
-						{Array.from({ length: 5 }).map((_, index) => (
-							<BookCard key={index}></BookCard>
+						{books.map((book) => (
+							<BookCard key={book.id} book={book}></BookCard>
 						))}
 					</BookList>
 				</Wrapper>

@@ -17,7 +17,7 @@ export const Wrapper = styled.div`
 	width: 100%;
 	box-sizing: border-box;
 
-	.header {
+	>.header {
 		color: #000;
 		font-size: 24px;
 		padding: 0px;
