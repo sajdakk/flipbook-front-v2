@@ -16,7 +16,7 @@ export interface SearchDto {
 
 export const getFileUrl = (file: string) => {
 	return `${process.env['API']}/uploads/${file}`;
-}
+};
 
 export const API = () => {
 	const url = process.env['API']!;
@@ -58,9 +58,14 @@ export const API = () => {
 			get: async () => {
 				return client<User>(`/users/${id}`, {
 					method: 'GET',
-				}).catch((error) => {
-					throw error;
 				});
+			},
+			avatar: {
+				delete: async () => {
+					return client(`/users/${id}/avatar`, {
+						method: 'DELETE',
+					});
+				},
 			},
 		}),
 

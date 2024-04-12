@@ -7,6 +7,7 @@ interface SessionManager {
 	currentUser: User | undefined;
 	setCurrentUser: (user: User) => void;
 	logout: () => void;
+	fetchUser: (userId: number) => void;
 }
 
 const STORAGE_KEY = 'current_user_id';
@@ -42,6 +43,7 @@ const SessionManagerContext = createContext<SessionManager>({
 	currentUser: undefined,
 	setCurrentUser: () => {},
 	logout: () => {},
+	fetchUser: () => {},
 });
 
 export const useSessionManager = () => useContext(SessionManagerContext);
@@ -91,8 +93,8 @@ export const SessionManagerProvider: React.FC<Props> = ({ children }: Props) => 
 	const fetchUser = async (currentUserId: number) => {
 		try {
 			const response = await API().user(currentUserId).get();
-
 			setUser(response.data);
+
 		} catch (error) {
 			console.trace(error);
 
@@ -114,6 +116,7 @@ export const SessionManagerProvider: React.FC<Props> = ({ children }: Props) => 
 			setUser(undefined);
 			navigate('/login?logout=1');
 		},
+		fetchUser: (userId: number) => fetchUser(userId),
 	};
 
 	return <SessionManagerContext.Provider value={sessionManager}>{children}</SessionManagerContext.Provider>;

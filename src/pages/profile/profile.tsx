@@ -7,6 +7,7 @@ import { colors } from '../../styles/colors';
 import { ProfileReviewCard } from '../../components/profile-review-card';
 import { useSessionManager } from '../../utils/session_provider';
 import { useProfile } from './use_profile';
+import { UploadFile } from 'antd';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -77,7 +78,7 @@ const RoundedIcon = styled.div`
 
 export const Profile: React.FC = () => {
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
-	const { user } = useProfile();
+	const { user, fetchUser } = useProfile();
 
 	if (!user) {
 		return (
@@ -92,12 +93,16 @@ export const Profile: React.FC = () => {
 		);
 	}
 
+	const _onAvatarChange = () => {
+		fetchUser(user.id);
+	};
+
 	return (
 		<>
 			<Header></Header>
 			<main>
 				<Wrapper>
-					<AvatarInput initialValue={null} />
+					<AvatarInput initialValue={user.avatar} onChange={_onAvatarChange} user={user} />
 
 					<div className="poppins-semibold header">Hello, {user.name}</div>
 					<Menu>

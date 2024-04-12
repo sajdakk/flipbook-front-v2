@@ -6,10 +6,11 @@ export const useProfile = () => {
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [sessionManager.currentUser]);
 
 	const fetchData = async () => {};
 
-	return { user: sessionManager.currentUser};
+	const fetchUser = sessionManager.fetchUser;
 
+	return { user: sessionManager.currentUser, fetchUser };
 };

@@ -40,7 +40,7 @@ export const useLogin = () => {
 			navigate('/');
 		} catch (error) {
 			setLoading(false);
-			message.error(error.response.data.message);
+			message.error(error.message);
 		}
 	};
 
