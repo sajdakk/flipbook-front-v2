@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Book, User } from '../types';
+import { Book, Profile, User } from '../types';
 
 export interface RegisterDto {
 	email: string;
@@ -64,6 +64,13 @@ export const API = () => {
 				delete: async () => {
 					return client(`/users/${id}/avatar`, {
 						method: 'DELETE',
+					});
+				},
+			},
+			profile: {
+				get: async () => {
+					return client<Profile>(`/users/${id}/profile`, {
+						method: 'GET',
 					});
 				},
 			},

@@ -7,7 +7,8 @@ import { colors } from '../../styles/colors';
 import { ProfileReviewCard } from '../../components/profile-review-card';
 import { useSessionManager } from '../../utils/session_provider';
 import { useProfile } from './use_profile';
-import { UploadFile } from 'antd';
+import { Skeleton, UploadFile } from 'antd';
+import { ProfileBookCard } from '../../components';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -78,7 +79,7 @@ const RoundedIcon = styled.div`
 
 export const Profile: React.FC = () => {
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
-	const { user, fetchUser } = useProfile();
+	const { user, profile, fetchUser } = useProfile();
 
 	if (!user) {
 		return (
@@ -87,6 +88,19 @@ export const Profile: React.FC = () => {
 				<main>
 					<Wrapper>
 						<div className="poppins-semibold header">You have to log in to see your profile</div>
+					</Wrapper>
+				</main>
+			</>
+		);
+	}
+
+	if (!profile) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<Skeleton active />
 					</Wrapper>
 				</main>
 			</>
@@ -166,9 +180,11 @@ export const Profile: React.FC = () => {
 									}
 						}
 					>
-						{Array.from({ length: 5 }).map((_, index) => (
-							<ProfileReviewCard key={index}></ProfileReviewCard>
-						))}
+						{profile.reviews !== undefined
+							? profile.reviews.map((review, index) => (
+									<ProfileReviewCard key={index} review={review}></ProfileReviewCard>
+								))
+							: null}
 					</ItemList>
 					<ItemList
 						style={
@@ -181,9 +197,9 @@ export const Profile: React.FC = () => {
 									}
 						}
 					>
-						{Array.from({ length: 2 }).map((_, index) => (
-							<ProfileReviewCard key={index}></ProfileReviewCard>
-						))}
+						{profile.books !== undefined
+							? profile.books.map((book, index) => <ProfileBookCard key={index} book={book}></ProfileBookCard>)
+							: null}
 					</ItemList>
 				</Wrapper>
 			</main>

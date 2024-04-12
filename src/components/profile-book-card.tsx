@@ -2,7 +2,7 @@ import { StarOutlined } from '@ant-design/icons';
 import React from 'react';
 import { colors } from '../styles/colors';
 import { styled } from 'styled-components';
-import { ReviewForProfile } from '../types';
+import { Book, ReviewForBook } from '../types';
 import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
@@ -113,18 +113,27 @@ const Score = styled.div`
 `;
 
 interface Props {
-	review: ReviewForProfile;
+	book: Book;
 }
 
-export const ProfileReviewCard: React.FC<Props> = ({ review }) => {
+export const ProfileBookCard: React.FC<Props> = ({ book }) => {
 	const navigate = useNavigate();
 
+	const _getRate = (reviews: ReviewForBook[]) => {
+		if (reviews.length === 0) {
+			return 0;
+		}
+		let sum = 0;
+		reviews.forEach((review) => (sum += review.rate));
+		return (sum / reviews.length).toPrecision(2);
+	};
+
 	const _getStatus = (): string => {
-		if (review.acceptDate) {
+		if (book.acceptDate) {
 			return 'accepted';
 		}
 
-		if (review.rejectDate) {
+		if (book.rejectDate) {
 			return 'rejected';
 		}
 
@@ -132,7 +141,7 @@ export const ProfileReviewCard: React.FC<Props> = ({ review }) => {
 	};
 
 	return (
-		<Wrapper onClick={() => navigate(`/books/${review.id}`)}>
+		<Wrapper onClick={() => navigate(`/books/${book.id}`)}>
 			<div className="card-content">
 				<div className="card-info">
 					<div
@@ -141,7 +150,7 @@ export const ProfileReviewCard: React.FC<Props> = ({ review }) => {
 							fontSize: '14px',
 						}}
 					>
-						{review.book.title}
+						{book.title}
 					</div>
 					<div
 						className="inter-regular"
@@ -150,7 +159,7 @@ export const ProfileReviewCard: React.FC<Props> = ({ review }) => {
 							color: colors.text3,
 						}}
 					>
-						{review.book.authors.map((author) => `${author.name} ${author.surname}`).join(', ')}
+						{book.authors.map((author) => `${author.name} ${author.surname}`).join(', ')}
 					</div>
 					<div
 						className="dm-sans-regular"
@@ -159,7 +168,7 @@ export const ProfileReviewCard: React.FC<Props> = ({ review }) => {
 							color: colors.text4,
 						}}
 					>
-						{review.content}
+						{book.description}
 					</div>
 				</div>
 			</div>
@@ -169,7 +178,7 @@ export const ProfileReviewCard: React.FC<Props> = ({ review }) => {
 						<StarOutlined style={{ color: colors.ascent }} />
 
 						<div className="inter-light" style={{ fontSize: '12px', color: colors.text3, whiteSpace: 'nowrap' }}>
-							{review.rate} / 5
+							{_getRate(book.reviews)} / 5
 						</div>
 					</Score>
 					<div style={{ textTransform: 'capitalize' }} className={`status-${_getStatus()}`}>
