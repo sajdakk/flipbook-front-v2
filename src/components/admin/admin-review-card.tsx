@@ -4,6 +4,8 @@ import { styled } from 'styled-components';
 import { colors } from '../../styles/colors';
 import { AscentButton } from '../ascent-button';
 import { DangerButton } from '..';
+import { Review } from '../../types';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -44,8 +46,6 @@ const Wrapper = styled.div`
 		align-items: center;
 		gap: 24px;
 		height: 100%;
-
-		
 	}
 
 	.status-rejected {
@@ -122,9 +122,31 @@ const Score = styled.div`
 	height: 20px;
 `;
 
-export const AdminReviewCard: React.FC = () => {
+interface Props {
+	review: Review;
+	acceptReview: (id: number) => void;
+	rejectReview: (id: number) => void;
+}
+
+export const AdminReviewCard: React.FC<Props> = ({ review, acceptReview, rejectReview }: Props) => {
+	const [acceptLoading, setAcceptLoading] = React.useState(false);
+	const [rejectLoading, setRejectLoading] = React.useState(false);
+	const navigate = useNavigate();
+
+	const handleAccept = async () => {
+		setAcceptLoading(true);
+		await acceptReview(review.id);
+		setAcceptLoading(false);
+	};
+
+	const handleReject = async () => {
+		setRejectLoading(true);
+		await rejectReview(review.id);
+		setRejectLoading(false);
+	};
+
 	return (
-		<Wrapper>
+		<Wrapper onClick={() => navigate(`/books/${review.book.id}`)}>
 			<div className="card-content">
 				<div className="card-info">
 					<div
@@ -133,7 +155,7 @@ export const AdminReviewCard: React.FC = () => {
 							fontSize: '14px',
 						}}
 					>
-						Harry Potter and the philosopher's stone
+						{review.book.title}
 					</div>
 					<div
 						className="inter-regular"
@@ -142,7 +164,7 @@ export const AdminReviewCard: React.FC = () => {
 							color: colors.text3,
 						}}
 					>
-						Rowling, J. K.
+						{review.book.authors.map((author) => author.name + ' ' + author.surname).join(', ')}
 					</div>
 					<div
 						className="dm-sans-regular"
@@ -151,10 +173,7 @@ export const AdminReviewCard: React.FC = () => {
 							color: colors.text4,
 						}}
 					>
-						Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz
-						pierwszy użyty w XV w. Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle
-						poligraficznym. Został po raz pierwszy użyty w XV w. Lorem Ipsum jest tekstem stosowanym jako przykładowy
-						wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w..
+						{review.content}
 					</div>
 				</div>
 			</div>
@@ -164,13 +183,29 @@ export const AdminReviewCard: React.FC = () => {
 						<StarOutlined style={{ color: colors.ascent }} />
 
 						<div className="inter-light" style={{ fontSize: '12px', color: colors.text3, whiteSpace: 'nowrap' }}>
-							4.5 / 5
+							{review.rate} / 5
 						</div>
 					</Score>
-				<div className='buttons'>
-					<AscentButton>Accept</AscentButton>
-					<DangerButton>Reject</DangerButton>
-				</div>
+					<div className="buttons">
+						<AscentButton
+							loading={acceptLoading}
+							onClick={(e) => {
+								e.stopPropagation();
+								handleAccept();
+							}}
+						>
+							Accept
+						</AscentButton>
+						<DangerButton
+							loading={rejectLoading}
+							onClick={(e) => {
+								e.stopPropagation();
+								handleReject();
+							}}
+						>
+							Reject
+						</DangerButton>
+					</div>
 				</div>
 			</div>
 		</Wrapper>

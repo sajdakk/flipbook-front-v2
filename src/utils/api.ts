@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { Book, Profile, User } from '../types';
+import { Book, Genre, Language, Profile, Review, User } from '../types';
+import { Favorites } from '../pages/favorites/favorites';
 
 export interface RegisterDto {
 	email: string;
@@ -12,6 +13,26 @@ export interface SearchDto {
 	title: string;
 	name: string;
 	surname: string;
+}
+
+export interface AuthorDto {
+	id: number | undefined;
+	name: string;
+	surname: string;
+}
+
+export interface AddBookDto {
+	title: string;
+	genre_id: number;
+	language_id: number;
+	date_of_publication: string;
+	page_count: number;
+	image: string;
+	imageExtension: string;
+	isbn_number: string;
+	description: string;
+	created_by: number;
+	authors: AuthorDto[];
 }
 
 export const getFileUrl = (file: string) => {
@@ -80,8 +101,19 @@ export const API = () => {
 			get: async () => {
 				return client<Book[]>('/books', {
 					method: 'GET',
-				}).catch((error) => {
-					throw error;
+				});
+			},
+
+			add: async (data: AddBookDto) => {
+				return client<Book>('/books/add', {
+					method: 'POST',
+					data,
+				});
+			},
+
+			admin: async () => {
+				return client<Book[]>('/books/admin', {
+					method: 'GET',
 				});
 			},
 
@@ -91,8 +123,12 @@ export const API = () => {
 					params: {
 						limit,
 					},
-				}).catch((error) => {
-					throw error;
+				});
+			},
+
+			favorites: async () => {
+				return client<Book[]>('/books/favorites', {
+					method: 'GET',
 				});
 			},
 
@@ -100,8 +136,86 @@ export const API = () => {
 				return client<Book[]>('/books/search', {
 					method: 'POST',
 					data,
-				}).catch((error) => {
-					throw error;
+				});
+			},
+		}),
+
+		book: (id: number) => ({
+			get: async () => {
+				return client<Book>(`/books/${id}`, {
+					method: 'GET',
+				});
+			},
+			accept: async () => {
+				return client(`/books/${id}/accept`, {
+					method: 'POST',
+				});
+			},
+			reject: async () => {
+				return client(`/books/${id}/reject`, {
+					method: 'POST',
+				});
+			},
+		}),
+
+		favorites: () => ({
+			toggle: async (bookId: number) => {
+				return client<Book>(`/favorites/toggle`, {
+					method: 'POST',
+					data: {
+						bookId,
+					},
+				});
+			},
+		}),
+
+		reviews: () => ({
+			admin: async () => {
+				return client<Review[]>('/reviews/admin', {
+					method: 'GET',
+				});
+			},
+			add: async (bookId: number, content: string, rate: number) => {
+				return client(`/reviews/add`, {
+					method: 'POST',
+					data: {
+						bookId,
+						content,
+						rate,
+					},
+				});
+			},
+		}),
+		review: (id: number) => ({
+			accept: async () => {
+				return client(`/reviews/${id}/accept`, {
+					method: 'POST',
+				});
+			},
+			reject: async () => {
+				return client(`/reviews/${id}/reject`, {
+					method: 'POST',
+				});
+			},
+		}),
+		languages: () => ({
+			get: async () => {
+				return client<Language[]>('/languages', {
+					method: 'GET',
+				});
+			},
+		}),
+		genres: () => ({
+			get: async () => {
+				return client<Genre[]>('/genres', {
+					method: 'GET',
+				});
+			},
+		}),
+		authors: () => ({
+			get: async () => {
+				return client<AuthorDto[]>('/authors', {
+					method: 'GET',
 				});
 			},
 		}),

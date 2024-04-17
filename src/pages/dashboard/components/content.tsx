@@ -1,7 +1,7 @@
 import React from 'react';
 import { Book } from '../../..';
 import { styled } from 'styled-components';
-import { BookCard } from '../../../components/book-card';
+import { BookCard } from '../../../components/book-card/book-card';
 
 const BookList = styled.div`
 	display: flex;

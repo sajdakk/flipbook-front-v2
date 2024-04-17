@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Header } from '../../components/header';
-import { BookCard } from '../../components/book-card';
 import { useTop } from './use_top';
 import { Skeleton } from 'antd';
+import { BookCard } from '../../components/book-card/book-card';
 
 export const Wrapper = styled.div`
 	display: flex;

@@ -1,10 +1,11 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { colors } from '../styles/colors';
-import { HeartFilled, StarOutlined } from '@ant-design/icons';
+import { colors } from '../../styles/colors';
+import { HeartFilled, HeartOutlined, StarOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { Book, ReviewForBook } from '..';
-import { API, getFileUrl } from '../utils/api';
+import { Book, ReviewForBook } from '../..';
+import { API, getFileUrl } from '../../utils/api';
+import { useBookCard } from './use-book-card';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -92,6 +93,7 @@ interface Props {
 }
 
 export const BookCard: React.FC<Props> = ({ book }: Props) => {
+	const { isFavorite, toggleFavorite } = useBookCard(book.id);
 	const navigate = useNavigate();
 
 	const _getRate = (reviews: ReviewForBook[]) => {
@@ -112,7 +114,25 @@ export const BookCard: React.FC<Props> = ({ book }: Props) => {
 						<div className="inter-semibold" style={{ color: colors.text2 }}>
 							{book.title}
 						</div>
-						<HeartFilled className="heart" style={{ color: colors.ascent, cursor: 'pointer' }} />
+						{isFavorite ? (
+							<HeartFilled
+								className="heart"
+								style={{ color: colors.ascent, cursor: 'pointer' }}
+								onClick={(e) => {
+									e.stopPropagation();
+									toggleFavorite();
+								}}
+							/>
+						) : (
+							<HeartOutlined
+								className="heart"
+								style={{ color: colors.ascent, cursor: 'pointer' }}
+								onClick={(e) => {
+									e.stopPropagation();
+									toggleFavorite();
+								}}
+							/>
+						)}
 					</div>
 					<div className="inter-regular" style={{ fontSize: '10px', color: colors.text3 }}>
 						{book.authors.map((author) => `${author.name} ${author.surname}`).join(', ')}

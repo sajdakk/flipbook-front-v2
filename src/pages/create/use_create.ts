@@ -1,18 +1,41 @@
 import { useState, useEffect } from 'react';
-import { User } from '../../types';
+import { Genre, Language, User } from '../../types';
 import { useSessionManager } from '../../utils/session_provider';
+import { API, AddBookDto, AuthorDto } from '../../utils/api';
 
 export const useCreate = () => {
-	const [user, setUser] = useState<User | undefined>(undefined);
 	const sessionManager = useSessionManager();
+	const [languages, setLanguages] = useState<Language[] | undefined>(undefined);
+	const [genres, setGenres] = useState<Genre[] | undefined>(undefined);
+	const [authors, setAuthors] = useState<AuthorDto[] | undefined>(undefined);
+	const user = sessionManager.currentUser;
 
 	useEffect(() => {
-		fetchData();
+		if (!user) {
+			return;
+		}
+
+		fetchLanguages();
+		fetchGenres();
+		fetchAuthors();
 	}, [user]);
 
-	const fetchData = async () => {
-		setUser(sessionManager.currentUser);
+	const fetchLanguages = async () => {
+		const response = await API().languages().get();
+		setLanguages(response.data);
 	};
 
-	return { user };
+	const fetchGenres = async () => {
+		const response = await API().genres().get();
+		setGenres(response.data);
+	};
+
+	const fetchAuthors = async () => {
+		const response = await API().authors().get();
+		setAuthors(response.data);
+	}
+
+	const addBook = async (book: AddBookDto) => {};
+
+	return { user, languages, genres, authors, addBook };
 };

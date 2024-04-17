@@ -1,10 +1,14 @@
 import { StarFilled, StarOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
+import { Input, TimePicker } from 'antd';
 import React from 'react';
 import { styled } from 'styled-components';
-import { AscentButton } from './ascent-button';
-import { colors } from '../styles/colors';
+import { AscentButton } from '../ascent-button';
+import { colors } from '../../styles/colors';
 import TextArea from 'antd/es/input/TextArea';
+import moment, { now } from 'moment';
+import { Book, User } from '../../types';
+import { getFileUrl } from '../../utils/api';
+import { time } from 'console';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -107,26 +111,70 @@ const ColoredStarOutlined = styled(StarOutlined)`
 	color: ${() => colors.ascent};
 `;
 
-export const AddReview: React.FC = () => {
+interface Props {
+	user: User;
+	book: Book;
+	addReview: (review: string, rating: number) => Promise<void>;
+}
+
+export const AddReviewCard: React.FC<Props> = ({ user, book, addReview }) => {
 	const [selectedStar, setSelectedStar] = React.useState(0);
+	const [loading, setLoading] = React.useState(false);
+	const [review, setReview] = React.useState('');
+
+	const capitalize = (str: string) => {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	};
+
+	const _submit = async () => {
+		if (review === '') {
+			return;
+		}
+
+		if (selectedStar === 0) {
+			return;
+		}
+
+		setLoading(true);
+		await addReview(review, selectedStar);
+		setLoading(false);
+	};
+
+	const yourReview = book.reviews.find((review) => review.user.id === user.id);
+
+	if (yourReview !== undefined) {
+		if (yourReview.acceptDate === null) {
+			return (
+				<div style={{ fontSize: '14px' }} className="poppins-regular">
+					You have already reviewed this book. Waiting for acceptance.
+				</div>
+			);
+		}
+
+		return (
+			<div style={{ fontSize: '14px' }} className="poppins-regular">
+				You have already reviewed this book.
+			</div>
+		);
+	}
 
 	return (
 		<Wrapper>
-			<img
-				className="imagePreview"
-				src="https://w0.peakpx.com/wallpaper/660/478/HD-wallpaper-pride-and-joy-profile-colorful-black-art-rainbow-fantasy-phill314-girl-luminos.jpg"
-				alt="News Image 1"
-			/>
+			<img className="imagePreview" src={getFileUrl(user.avatar)} alt="News Image 1" />
 
 			<div className="review-content">
-				<div className="inter-semibold header">Anita | 15.12.2023 r.</div>
-				<ReviewForm id="reviewForm" action="addReview" method="post">
+				<div className="inter-semibold header">
+					{capitalize(user.name)} | {moment(now()).format('DD.MM.YYYY')} r.
+				</div>
+				<ReviewForm id="reviewForm">
 					<div className="review-inputs">
 						<TextArea
 							style={{
 								width: '100%',
 							}}
 							placeholder="Type something..."
+							value={review}
+							onChange={(e) => setReview(e.target.value)}
 							required
 						/>
 						<div className="review-stars">
@@ -140,7 +188,9 @@ export const AddReview: React.FC = () => {
 						</div>
 					</div>
 
-					<AscentButton>Sent to review</AscentButton>
+					<AscentButton loading={loading} onClick={_submit}>
+						Sent to review
+					</AscentButton>
 				</ReviewForm>
 			</div>
 		</Wrapper>

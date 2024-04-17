@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Header } from '../../components/header/header';
 import { Input, Skeleton } from 'antd';
-import { BookCard } from '../../components/book-card';
 import { AscentButton } from '../../components';
 import { useDashboard } from './use_dashboard';
 import { Content } from './components/content';

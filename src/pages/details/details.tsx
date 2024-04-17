@@ -3,9 +3,13 @@ import styled from 'styled-components';
 import { Header } from '../../components/header';
 import { colors } from '../../styles/colors';
 import { StarOutlined } from '@ant-design/icons';
-import { Space } from 'antd';
-import { AddReview } from '../../components/add_review';
+import { Skeleton, Space } from 'antd';
+import { AddReviewCard } from '../../components/add_review/add_review_card';
 import { ReviewCard } from '../../components/review-card';
+import { useDetails } from './use_details';
+import { getFileUrl } from '../../utils/api';
+import moment from 'moment';
+import { ReviewForBook } from '../../types';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -17,7 +21,7 @@ export const Wrapper = styled.div`
 	width: 100%;
 	box-sizing: border-box;
 
-	>.header {
+	> .header {
 		color: #000;
 		font-size: 24px;
 		padding: 0px;
@@ -25,24 +29,19 @@ export const Wrapper = styled.div`
 
 	.subtitle {
 		font-size: 14px;
-
 	}
 
 	> #description {
 		color: ${() => colors.text4};
 		text-align: center;
 		font-size: 14px;
-
+		max-width: 800px;
 	}
 
 	@media screen and (max-width: 780px) {
 		.header {
 			font-size: 20px;
 			align-self: flex-start;
-		}
-
-		.subtitle {
-			font-size: 14px;
 		}
 
 		> #description {
@@ -115,6 +114,33 @@ const BookDetails = styled.div`
 `;
 
 export const Details: React.FC = () => {
+	const { book, user, addReview } = useDetails();
+
+	const _getRate = (reviews: ReviewForBook[]) => {
+		if (reviews.length === 0) {
+			return 0;
+		}
+		let sum = 0;
+		reviews.forEach((review) => (sum += review.rate));
+		return (sum / reviews.length).toPrecision(2);
+	};
+
+	if (!book) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<Skeleton active />
+					</Wrapper>
+				</main>
+			</>
+		);
+	}
+
+	const dateOfPub = new Date(book.dateOfPublication);
+	const acceptedReviews = book.reviews.filter((review) => review.acceptDate !== null);
+
 	return (
 		<>
 			<Header></Header>
@@ -122,19 +148,19 @@ export const Details: React.FC = () => {
 				<Wrapper>
 					<MobileWrapper>
 						<BookDetails>
-							<img
-								className="book-image"
-								src="https://i.guim.co.uk/img/media/423d3ddf306e98864c1d887c1dcf290421cd21a7/0_169_4912_6140/master/4912.jpg?width=700&quality=85&auto=format&fit=max&s=864393ed1c322fc5ddcb2766c3c945e6"
-								alt="News Image 2"
-							/>
+							<img className="book-image" src={getFileUrl(book.image)} alt="News Image 2" />
 							<div className="info">
-								<div className="poppins-semibold header">Pan Tadeusz</div>
-								<div className="poppins-regular subtitle">Adam Mickiewicz</div>
-								<div className="poppins-regular subtitle">Language: polski</div>
-								<div className="poppins-regular subtitle">Date of publication: 20.11.2023 r.</div>
-								<div className="poppins-regular subtitle">Page count: 306</div>
-								<div className="poppins-regular subtitle">ISBN number: 400-12-407-1234-5</div>
-								<div className="poppins-regular subtitle">Genre: epopeja</div>
+								<div className="poppins-semibold header">{book.title}</div>
+								<div className="poppins-regular subtitle">
+									{book.authors.map((author) => `${author.name} ${author.surname}`).join(', ')}
+								</div>
+								<div className="poppins-regular subtitle">Language: {book.language.language}</div>
+								<div className="poppins-regular subtitle">
+									Date of publication: {moment(dateOfPub).format('DD-MM-YYYY')}r.
+								</div>
+								<div className="poppins-regular subtitle">Page count: {book.pageCount}</div>
+								<div className="poppins-regular subtitle">ISBN number: {book.isbnNumber}</div>
+								<div className="poppins-regular subtitle">Genre: {book.genre.title}</div>
 							</div>
 							<Space size={8}>
 								<StarOutlined className="rate" style={{ color: colors.ascent }} />
@@ -144,35 +170,39 @@ export const Details: React.FC = () => {
 										color: colors.text3,
 									}}
 								>
-									4.5/5
+									{_getRate(book.reviews)}/5
 								</div>
 							</Space>
 						</BookDetails>
 						<div className="mobile-info">
-							<div className="poppins-semibold header">Pan Tadeusz</div>
-							<div className="poppins-regular subtitle">Adam Mickiewicz</div>
-							<div className="poppins-regular subtitle">Language: polski</div>
-							<div className="poppins-regular subtitle">Date of publication: 20.11.2023 r.</div>
-							<div className="poppins-regular subtitle">Page count: 306</div>
-							<div className="poppins-regular subtitle">ISBN number: 400-12-407-1234-5</div>
-							<div className="poppins-regular subtitle">Genre: epopeja</div>
+							<div className="poppins-semibold header">{book.title}</div>
+							<div className="poppins-regular subtitle">
+								{book.authors.map((author) => `${author.name} ${author.surname}`).join(', ')}
+							</div>
+							<div className="poppins-regular subtitle">Language: {book.language.language}</div>
+							<div className="poppins-regular subtitle">
+								Date of publication: {moment(dateOfPub).format('DD.MM.YYYY')}r.
+							</div>
+							<div className="poppins-regular subtitle">Page count: {book.pageCount}</div>
+							<div className="poppins-regular subtitle">ISBN number: {book.isbnNumber}</div>
+							<div className="poppins-regular subtitle">Genre: {book.genre.title}</div>
 						</div>
 					</MobileWrapper>
 					<div id="description" className="dm-sans-regular">
-						Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz
-						pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później
-						zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w
-						latach 60. XX w. wraz z publikacją. Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w
-						przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia
-						tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając
-						praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją
+						{book.description}
 					</div>
 					<div className="poppins-semibold header">Add your review</div>
-					<AddReview />
+					{user == undefined ? (
+						<div className="poppins-regular subtitle">Log in to add a review</div>
+					) : (
+						<AddReviewCard user={user} book={book} addReview={addReview} />
+					)}
 					<div className="poppins-semibold header">What people are saying?</div>
-					{Array.from({ length: 5 }).map((_, index) => (
-						<ReviewCard key={index}></ReviewCard>
-					))}
+					{acceptedReviews.length === 0 ? (
+						<div className="poppins-regular subtitle">There is no reviews yet</div>
+					) : (
+						acceptedReviews.map((review) => <ReviewCard key={review.id} review={review} />)
+					)}
 				</Wrapper>
 			</main>
 		</>

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { styled } from 'styled-components';
 import { colors } from '../styles/colors';
+import { Button } from 'antd';
 
 const Wrapper = styled.div`
 	> button {
@@ -30,14 +31,19 @@ const Wrapper = styled.div`
 `;
 
 interface Props {
-	children: ReactNode;
-	onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+	children: string;
+	className?: string;
+	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+	loading?: boolean;
+	htmlType?: 'button' | 'submit' | 'reset' | undefined;
 }
 
-export const DangerButton: React.FC<Props> = ({ children, onClick }: Props) => {
+export const DangerButton: React.FC<Props> = ({ children, onClick, loading, className, htmlType }: Props) => {
 	return (
-		<Wrapper>
-			<button onClick={(event) => onClick?.call(event)}>{children}</button>
+		<Wrapper className={className}>
+			<Button loading={loading} htmlType={htmlType} onClick={(event) => onClick?.call(event)}>
+				{children}
+			</Button>
 		</Wrapper>
 	);
 };

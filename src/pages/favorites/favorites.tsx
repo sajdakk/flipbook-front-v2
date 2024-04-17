@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Header } from '../../components/header/header';
-import { BookCard } from '../../components/book-card';
+import { BookCard } from '../../components/book-card/book-card';
 import { useFavorites } from './use_favorites';
 
 export const Wrapper = styled.div`
@@ -42,7 +42,7 @@ const BookList = styled.div`
 `;
 
 export const Favorites: React.FC = () => {
-	const { user } = useFavorites();
+	const { user, books } = useFavorites();
 
 	if (!user) {
 		return (
@@ -64,11 +64,7 @@ export const Favorites: React.FC = () => {
 				<Wrapper>
 					<div className="poppins-semibold header">Favorites</div>
 
-					<BookList>
-						{Array.from({ length: 5 }).map((_, index) => (
-							<BookCard key={index}></BookCard>
-						))}
-					</BookList>
+					<BookList>{books?.map((book) => <BookCard key={book.id} book={book} />)}</BookList>
 				</Wrapper>
 			</main>
 		</>

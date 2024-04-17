@@ -3,6 +3,10 @@ import { Space } from 'antd';
 import React from 'react';
 import { styled } from 'styled-components';
 import { colors } from '../styles/colors';
+import { ReviewForBook } from '../types';
+import { get } from 'http';
+import { getFileUrl } from '../utils/api';
+import moment from 'moment';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -107,15 +111,19 @@ const Wrapper = styled.div`
 	}
 `;
 
-export const ReviewCard: React.FC = () => {
+interface Props {
+	review: ReviewForBook;
+}
+
+export const ReviewCard: React.FC<Props> = ({ review }) => {
+	const capitalize = (str: string) => {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	};
+
 	return (
 		<Wrapper>
 			<div className="mobile-left-side-card">
-				<img
-					className="imagePreview"
-					src="https://w0.peakpx.com/wallpaper/660/478/HD-wallpaper-pride-and-joy-profile-colorful-black-art-rainbow-fantasy-phill314-girl-luminos.jpg"
-					alt="avatar"
-				/>
+				<img className="imagePreview" src={getFileUrl(review.user.avatar)} alt="avatar" />
 
 				<Space className="mobile-stars" size={8}>
 					<StarOutlined className="rate" style={{ color: colors.ascent }} />
@@ -125,19 +133,13 @@ export const ReviewCard: React.FC = () => {
 							color: colors.text3,
 						}}
 					>
-						4.5/5
+						{review.rate}/5
 					</div>
 				</Space>
 			</div>
 			<div className="card-content">
-				<div className="inter-semibold header">Anna | 10.10.2010 r.</div>
-				<div className="dm-sans-regular text-content">
-					Bardzo zgrabne fabularne połączenie faktów okołochopinowych. Czysta przyjemność czytania :) Doceniam
-					przygotowanie merytoryczne autorki i pasję, jaką włożyła w przybliżenie czytelnikom kobiet kochających i
-					kochanych przez Chopina. Jednakże moim zdaniem to książka "przegadana". Bohaterki opowiadają niezwykle
-					rozwlekle, a poza tym, niestety, autorka próbuje ukształtować je na ofiary męskiej dominacji w świecie,
-					męskiego myślenia itd. itp.
-				</div>
+				<div className="inter-semibold header">{`${capitalize(review.user.name)} | ${moment(review.uploadDate).format('DD.MM.YYYY')}r.`}</div>
+				<div className="dm-sans-regular text-content">{review.content}</div>
 			</div>
 			<Space className="stars" size={8}>
 				<StarOutlined className="rate" style={{ color: colors.ascent }} />
@@ -147,7 +149,7 @@ export const ReviewCard: React.FC = () => {
 						color: colors.text3,
 					}}
 				>
-					4.5/5
+					{review.rate}/5
 				</div>
 			</Space>
 		</Wrapper>

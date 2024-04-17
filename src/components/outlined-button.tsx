@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { colors } from '../styles/colors';
+import { Button } from 'antd';
 
 const Wrapper = styled.div`
 	> button {
@@ -30,15 +31,17 @@ const Wrapper = styled.div`
 
 interface Props {
 	text: string;
-	onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+	htmlType?: 'button' | 'submit' | 'reset' | undefined;
+
 }
 
-export const OutlinedButton: React.FC<Props> = ({ text, onClick }: Props) => {
+export const OutlinedButton: React.FC<Props> = ({ text, onClick,htmlType }: Props) => {
 	return (
 		<Wrapper>
-			<button className="poppins-medium" onClick={(event) => onClick?.call(event)}>
+			<Button className="poppins-medium" htmlType={htmlType} onClick={(event) => onClick?.call(event)}>
 				{text}
-			</button>
+			</Button>
 		</Wrapper>
 	);
 };

@@ -1,30 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Header } from '../../components/header/header';
-import { BookCard } from '../../components/book-card';
-import {
-	Button,
-	DatePicker,
-	DatePickerProps,
-	Dropdown,
-	Form,
-	Input,
-	InputNumber,
-	MenuProps,
-	Select,
-	Space,
-	Upload,
-	UploadProps,
-	message,
-} from 'antd';
-import { DownOutlined, InboxOutlined, UserOutlined } from '@ant-design/icons';
+import { DatePicker, DatePickerProps, Form, Input, InputNumber, Select, Skeleton, message } from 'antd';
 import { DefaultOptionType, SelectProps } from 'antd/es/select';
 import TextArea from 'antd/es/input/TextArea';
-import { colors } from '../../styles/colors';
 import { ImageInput } from '../../components/image_input';
 import { OutlinedButton } from '../../components/outlined-button';
 import { AscentButton } from '../../components';
 import { useCreate } from './use_create';
+import { AuthorDto } from '../../utils/api';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -85,7 +69,7 @@ const CreateBookForm = styled.form`
 	}
 `;
 
-const CreateAuthorForm = styled.form`
+const CreateAuthorSection = styled.div`
 	align-self: stretch;
 	flex-direction: row;
 	justify-content: flex-start;
@@ -113,8 +97,64 @@ const CreateAuthorForm = styled.form`
 export const Create: React.FC = () => {
 	const [selectedLanguageIds, setSelectedLanguageIds] = useState<number[]>([]);
 	const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+	const [selectedAuthors, setSelectedAuthors] = useState<AuthorDto[]>([]);
+	const [selectedAuthorOptions, setSelectedAuthorOptions] = useState<string[]>([]);
+	const [newAuthorName, setNewAuthorName] = useState('');
+	const [newAuthorSurname, setNewAuthorSurname] = useState('');
+	const [authorOptions, setAuthorOptions] = useState<DefaultOptionType[]>([]);
+	const [date, setDate] = useState<Date | null>(null);
+	const [form] = Form.useForm();
+
 	const [cover, setCover] = useState<File | null>(null);
-	const { user } = useCreate();
+	const { user, languages, genres, authors, addBook } = useCreate();
+
+	useEffect(() => {
+		if (!authors) {
+			return;
+		}
+
+		setAuthorOptions(
+			authors.map((author) => ({
+				label: `${author.name} ${author.surname}`,
+				value: `${author.name} ${author.surname}`,
+			}))
+		);
+	}, [authors]);
+
+	useEffect(() => {
+		const titleInput = document.querySelector('#title');
+		titleInput?.setAttribute('placeholder', 'Title');
+
+		const languageInput = document.querySelector('.ant-select-selector');
+		languageInput?.setAttribute('placeholder', 'Language');
+
+		const dateInput = document.querySelector('.ant-picker-input');
+		dateInput?.setAttribute('placeholder', 'Date of publication');
+
+		const pagesInput = document.querySelector('.ant-input-number-input');
+		pagesInput?.setAttribute('placeholder', 'Number of pages');
+
+		const isbnInput = document.querySelector('.ant-input');
+		isbnInput?.setAttribute('placeholder', 'ISBN number');
+
+		const descriptionInput = document.querySelector('.ant-input');
+		descriptionInput?.setAttribute('placeholder', 'Description');
+
+		const genreInput = document.querySelector('.ant-select-selector');
+		genreInput?.setAttribute('placeholder', 'Genre');
+
+		const coverInput = document.querySelector('.ant-upload');
+		coverInput?.setAttribute('placeholder', 'Cover image');
+
+		const authorInput = document.querySelector('.ant-select-selector');
+		authorInput?.setAttribute('placeholder', 'Select author(s)');
+
+		const addAuthorInput = document.querySelector('.ant-input');
+		addAuthorInput?.setAttribute('placeholder', 'Name');
+
+		const surnameInput = document.querySelector('.ant-input');
+		surnameInput?.setAttribute('placeholder', 'Surname');
+	}, []);
 
 	if (!user) {
 		return (
@@ -129,40 +169,90 @@ export const Create: React.FC = () => {
 		);
 	}
 
-	const items: DefaultOptionType['items'] = [
-		{
-			label: '1st menu item',
-			value: 1,
-		},
-		{
-			label: '2nd menu item',
-			value: 2,
-		},
-		{
-			label: '3rd menu item',
-			value: 3,
-		},
-		{
-			label: '4rd menu item',
-			value: 4,
-		},
-	];
-
-	const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-		console.log(date, dateString);
-	};
-
-	const authors: SelectProps['options'] = [];
-
-	for (let i = 10; i < 36; i++) {
-		authors.push({
-			label: 'Jan Kowalski',
-			value: i,
-		});
+	if (languages === undefined || genres === undefined || authors === undefined) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<Skeleton active />
+					</Wrapper>
+				</main>
+			</>
+		);
 	}
 
-	const handleAuthorsChange = (value: number[]) => {
-		console.log(`selected ${value}`);
+	const languageOptions: DefaultOptionType['items'] = languages.map((language) => ({
+		label: language.language,
+		value: language.id,
+	}));
+
+	const genreOptions: DefaultOptionType['items'] = genres.map((genre) => ({
+		label: genre.title,
+		value: genre.id,
+	}));
+
+	const _onSubmit = (e: any) => {
+		form
+			.validateFields()
+			.then((value) => {
+				addBook({
+					title: value.title,
+					genre_id: value.genre_id,
+					language_id: value.language_id,
+					date_of_publication: value.date_of_publication,
+					page_count: value.page_count,
+					image: '',
+					imageExtension: '',
+					isbn_number: value.isbn_number,
+					description: value.description,
+					created_by: user.id,
+					authors: selectedAuthors,
+				});
+			})
+			.catch((_) => {});
+	};
+
+	const handleAuthorsChange = (value: string[]) => {
+		const selectedAuthors = authors.filter((author) => value.includes(`${author.name} ${author.surname}`));
+		setSelectedAuthors(selectedAuthors);
+		setSelectedAuthorOptions(value);
+	};
+
+	const _addNewAuthor = () => {
+		if (!newAuthorName || !newAuthorSurname) {
+			message.error('Author name and surname are required');
+			return;
+		}
+		const authorString = `${newAuthorName} ${newAuthorSurname}`;
+
+		const exist = authorOptions?.some((author) => {
+			return author.value == authorString;
+		});
+		setNewAuthorName('');
+		setNewAuthorSurname('');
+
+		if (exist === true) {
+			message.error('Author already exists');
+			return;
+		}
+
+		const newAuthor: AuthorDto = {
+			id: undefined,
+			name: newAuthorName,
+			surname: newAuthorSurname,
+		};
+
+		setAuthorOptions([
+			...authorOptions,
+			{
+				label: `${newAuthor.name} ${newAuthor.surname}`,
+				value: `${newAuthor.name} ${newAuthor.surname}`,
+			},
+		]);
+
+		setSelectedAuthors([...selectedAuthors, newAuthor]);
+		setSelectedAuthorOptions([...selectedAuthorOptions, `${newAuthor.name} ${newAuthor.surname}`]);
 	};
 
 	return (
@@ -179,14 +269,14 @@ export const Create: React.FC = () => {
 							placeholder="Language"
 							value={selectedLanguageIds}
 							onChange={(value) => setSelectedLanguageIds(value)}
-							options={items}
+							options={languageOptions}
 							filterOption={(input: string, option: DefaultOptionType | undefined) =>
 								typeof option?.label === 'string' &&
 								(option?.label?.toLowerCase().indexOf(input.toLowerCase()) ?? -1) >= 0
 							}
 						/>
 
-						<DatePicker onChange={onDateChange} style={{ width: '100%' }} placeholder="Date of publication" />
+						<DatePicker value={date} onChange={setDate} style={{ width: '100%' }} placeholder="Date of publication" />
 						<InputNumber style={{ width: '100%' }} placeholder="Number of pages" />
 						<Input placeholder="ISBN number" />
 						<TextArea placeholder="description" aria-multiline="true" />
@@ -195,7 +285,7 @@ export const Create: React.FC = () => {
 							placeholder="Genre"
 							value={selectedGenreIds}
 							onChange={(value) => setSelectedGenreIds(value)}
-							options={items}
+							options={genreOptions}
 							filterOption={(input: string, option: DefaultOptionType | undefined) =>
 								typeof option?.label === 'string' &&
 								(option?.label?.toLowerCase().indexOf(input.toLowerCase()) ?? -1) >= 0
@@ -219,7 +309,8 @@ export const Create: React.FC = () => {
 							style={{ width: '100%' }}
 							placeholder="Select author(s)"
 							onChange={handleAuthorsChange}
-							options={authors}
+							options={authorOptions}
+							value={selectedAuthorOptions}
 							filterOption={(input: string, option: DefaultOptionType | undefined) =>
 								typeof option?.label === 'string' &&
 								(option?.label?.toLowerCase().indexOf(input.toLowerCase()) ?? -1) >= 0
@@ -227,13 +318,29 @@ export const Create: React.FC = () => {
 						/>
 						<div className="add-new-author-label poppins-regular">Add new author</div>
 
-						<CreateAuthorForm>
+						<CreateAuthorSection>
 							<div>
-								<Input style={{ width: '100%' }} placeholder="Name" />
-								<Input style={{ width: '100%' }} placeholder="Surname" />
+								<Input
+									style={{ width: '100%' }}
+									placeholder="Name"
+									value={newAuthorName}
+									onChange={(e) => setNewAuthorName(e.target.value)}
+								/>
+								<Input
+									style={{ width: '100%' }}
+									placeholder="Surname"
+									value={newAuthorSurname}
+									onChange={(e) => setNewAuthorSurname(e.target.value)}
+								/>
 							</div>
-							<OutlinedButton text="Add author" />
-						</CreateAuthorForm>
+							<OutlinedButton
+								htmlType="button"
+								onClick={() => {
+									_addNewAuthor();
+								}}
+								text="Add author"
+							/>
+						</CreateAuthorSection>
 						<AscentButton>Send book to review</AscentButton>
 					</CreateBookForm>
 				</Wrapper>

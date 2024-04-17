@@ -81,6 +81,17 @@ export const Profile: React.FC = () => {
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
 	const { user, profile, fetchUser } = useProfile();
 
+	const bookList = profile?.books ?? [];
+	const reviewList = profile?.reviews ?? [];
+
+	bookList.sort((a, b) => {
+		return b.uploadDate.valueOf() - a.uploadDate.valueOf();
+	});
+
+	reviewList.sort((a, b) => {
+		return b.uploadDate.valueOf() - a.uploadDate.valueOf();
+	});
+
 	if (!user) {
 		return (
 			<>
@@ -180,8 +191,8 @@ export const Profile: React.FC = () => {
 									}
 						}
 					>
-						{profile.reviews !== undefined
-							? profile.reviews.map((review, index) => (
+						{reviewList !== undefined
+							? reviewList.map((review, index) => (
 									<ProfileReviewCard key={index} review={review}></ProfileReviewCard>
 								))
 							: null}
@@ -197,8 +208,8 @@ export const Profile: React.FC = () => {
 									}
 						}
 					>
-						{profile.books !== undefined
-							? profile.books.map((book, index) => <ProfileBookCard key={index} book={book}></ProfileBookCard>)
+						{bookList !== undefined
+							? bookList.map((book, index) => <ProfileBookCard key={index} book={book}></ProfileBookCard>)
 							: null}
 					</ItemList>
 				</Wrapper>

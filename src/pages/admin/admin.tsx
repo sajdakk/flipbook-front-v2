@@ -7,6 +7,7 @@ import { colors } from '../../styles/colors';
 import { ProfileReviewCard } from '../../components/profile-review-card';
 import { useAdmin } from './use_admin';
 import { AdminReviewCard } from '../../components/admin/admin-review-card';
+import { Skeleton } from 'antd';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -77,7 +78,8 @@ const RoundedIcon = styled.div`
 
 export const Admin: React.FC = () => {
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
-	const { user } = useAdmin();
+
+	const { user, reviews, books, acceptReview, rejectReview, acceptBook, rejectBook } = useAdmin();
 
 	if (!user || user.role.id !== 3) {
 		return (
@@ -86,6 +88,19 @@ export const Admin: React.FC = () => {
 				<main>
 					<Wrapper>
 						<div className="poppins-semibold header">You have to be admin to see this page</div>
+					</Wrapper>
+				</main>
+			</>
+		);
+	}
+
+	if (books === undefined || reviews === undefined) {
+		return (
+			<>
+				<Header></Header>
+				<main>
+					<Wrapper>
+						<Skeleton active />
 					</Wrapper>
 				</main>
 			</>
@@ -158,9 +173,16 @@ export const Admin: React.FC = () => {
 									}
 						}
 					>
-						{Array.from({ length: 5 }).map((_, index) => (
-							<AdminReviewCard key={index}></AdminReviewCard>
+						{reviews.map((review) => (
+							<AdminReviewCard
+								key={review.id}
+								review={review}
+								acceptReview={acceptReview}
+								rejectReview={rejectReview}
+							></AdminReviewCard>
 						))}
+						
+					
 					</ItemList>
 					<ItemList
 						style={
@@ -173,9 +195,14 @@ export const Admin: React.FC = () => {
 									}
 						}
 					>
-						{Array.from({ length: 2 }).map((_, index) => (
-							<AdminReviewCard key={index}></AdminReviewCard>
-						))}
+						{/* {books.map((book) => (
+							<AdminReviewCard
+								key={book.id}
+								review={book}
+								acceptReview={acceptBook}
+								rejectReview={rejectBook}
+							></AdminReviewCard>
+						))} */}
 					</ItemList>
 				</Wrapper>
 			</main>
