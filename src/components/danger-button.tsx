@@ -39,9 +39,16 @@ interface Props {
 }
 
 export const DangerButton: React.FC<Props> = ({ children, onClick, loading, className, htmlType }: Props) => {
+	const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (onClick) {
+            onClick(event);
+        }
+    };
+
+
 	return (
 		<Wrapper className={className}>
-			<Button loading={loading} htmlType={htmlType} onClick={(event) => onClick?.call(event)}>
+			<Button loading={loading} htmlType={htmlType} onClick={handleClick}>
 				{children}
 			</Button>
 		</Wrapper>

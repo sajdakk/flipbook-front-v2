@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { Genre, Language, User } from '../../types';
 import { useSessionManager } from '../../utils/session_provider';
 import { API, AddBookDto, AuthorDto } from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
 
 export const useCreate = () => {
 	const sessionManager = useSessionManager();
+	const navigate = useNavigate();
 	const [languages, setLanguages] = useState<Language[] | undefined>(undefined);
 	const [genres, setGenres] = useState<Genre[] | undefined>(undefined);
 	const [authors, setAuthors] = useState<AuthorDto[] | undefined>(undefined);
@@ -33,9 +36,17 @@ export const useCreate = () => {
 	const fetchAuthors = async () => {
 		const response = await API().authors().get();
 		setAuthors(response.data);
-	}
+	};
 
-	const addBook = async (book: AddBookDto) => {};
+	const addBook = async (book: AddBookDto) => {
+		try {
+			await API().books().add(book);
+			message.success('Book sent to review!');
+			navigate(`/`);
+		} catch (e) {
+			message.error('Error sending book to review');
+		}
+	};
 
 	return { user, languages, genres, authors, addBook };
 };

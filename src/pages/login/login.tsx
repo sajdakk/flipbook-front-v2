@@ -111,14 +111,6 @@ export const Login: React.FC = () => {
 			.catch((_) => {});
 	};
 
-	useEffect(() => {
-		const emailInput = document.querySelector('#email');
-		emailInput?.setAttribute('placeholder', 'E-mail');
-
-		const passwordInput = document.querySelector('#password');
-		passwordInput?.setAttribute('placeholder', 'Password');
-	});
-
 	return (
 		<>
 			<Form onFinish={_onSubmit} scrollToFirstError form={form}>
@@ -144,7 +136,7 @@ export const Login: React.FC = () => {
 										},
 									]}
 								>
-									<Input />
+									<Input placeholder="E-mail" />
 								</Form.Item>
 								<Form.Item
 									name="password"
@@ -155,7 +147,7 @@ export const Login: React.FC = () => {
 										},
 									]}
 								>
-									<Input.Password />
+									<Input.Password placeholder="Password" />
 								</Form.Item>
 							</div>
 							<Form.Item>

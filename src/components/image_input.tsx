@@ -49,6 +49,7 @@ interface Props {
 export const ImageInput: React.FC<Props> = ({ value, onChange }: Props) => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [preview, setPreview] = useState<string | null>(null);
+	const [cover, setCover] = useState<File | null>(null);
 
 	useEffect(() => {
 		const fetch = async () => {

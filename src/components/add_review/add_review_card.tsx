@@ -142,6 +142,10 @@ export const AddReviewCard: React.FC<Props> = ({ user, book, addReview }) => {
 
 	const yourReview = book.reviews.find((review) => review.user.id === user.id);
 
+	if (book.acceptDate === null) {
+		return <></>;
+	}
+
 	if (yourReview !== undefined) {
 		if (yourReview.acceptDate === null) {
 			return (

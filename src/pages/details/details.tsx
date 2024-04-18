@@ -191,7 +191,8 @@ export const Details: React.FC = () => {
 					<div id="description" className="dm-sans-regular">
 						{book.description}
 					</div>
-					<div className="poppins-semibold header">Add your review</div>
+					{book.acceptDate != null ?? <div className="poppins-semibold header">Add your review</div>}
+
 					{user == undefined ? (
 						<div className="poppins-regular subtitle">Log in to add a review</div>
 					) : (

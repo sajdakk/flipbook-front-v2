@@ -75,6 +75,14 @@ export const API = () => {
 			});
 		},
 
+		users: () => ({
+			get: async () => {
+				return client<User[]>('/users', {
+					method: 'GET',
+				});
+			},
+		}),
+
 		user: (id: number) => ({
 			get: async () => {
 				return client<User>(`/users/${id}`, {
@@ -95,6 +103,16 @@ export const API = () => {
 					});
 				},
 			},
+			toggleAdmin: async () => {
+				return client(`/users/${id}/toggle-admin`, {
+					method: 'POST',
+				});
+			},
+			delete: async () => {
+				return client(`/users/${id}`, {
+					method: 'DELETE',
+				});
+			},
 		}),
 
 		books: () => ({
@@ -105,7 +123,7 @@ export const API = () => {
 			},
 
 			add: async (data: AddBookDto) => {
-				return client<Book>('/books/add', {
+				return client<void>('/books/add', {
 					method: 'POST',
 					data,
 				});

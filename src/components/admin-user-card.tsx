@@ -1,11 +1,12 @@
 import { StarOutlined } from '@ant-design/icons';
 import React from 'react';
 import { styled } from 'styled-components';
-import { colors } from '../../styles/colors';
-import { AscentButton } from '../ascent-button';
-import { DangerButton } from '..';
-import { Review } from '../../types';
+import { colors } from '../styles/colors';
+import { AscentButton } from './ascent-button';
+import { DangerButton } from '.';
+import { User } from '../types';
 import { useNavigate } from 'react-router-dom';
+import { Popconfirm } from 'antd';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -113,40 +114,31 @@ const Wrapper = styled.div`
 	}
 `;
 
-const Score = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: start;
-	gap: 8px;
-	align-items: center;
-	height: 20px;
-`;
-
 interface Props {
-	review: Review;
-	acceptReview: (id: number) => void;
-	rejectReview: (id: number) => void;
+	user: User;
+	toggleAdmin: (id: number) => void;
+	removeUser: (id: number) => void;
 }
 
-export const AdminReviewCard: React.FC<Props> = ({ review, acceptReview, rejectReview }: Props) => {
-	const [acceptLoading, setAcceptLoading] = React.useState(false);
-	const [rejectLoading, setRejectLoading] = React.useState(false);
+export const AdminUserCard: React.FC<Props> = ({ user, toggleAdmin, removeUser }: Props) => {
+	const [acceptLoading, setToggleAdminLoading] = React.useState(false);
+	const [rejectLoading, setRemoveLoading] = React.useState(false);
 	const navigate = useNavigate();
 
-	const handleAccept = async () => {
-		setAcceptLoading(true);
-		await acceptReview(review.id);
-		setAcceptLoading(false);
+	const handleToggleAdmin = async () => {
+		setToggleAdminLoading(true);
+		await toggleAdmin(user.id);
+		setToggleAdminLoading(false);
 	};
 
-	const handleReject = async () => {
-		setRejectLoading(true);
-		await rejectReview(review.id);
-		setRejectLoading(false);
+	const handleRemove = async () => {
+		setRemoveLoading(true);
+		await removeUser(user.id);
+		setRemoveLoading(false);
 	};
 
 	return (
-		<Wrapper onClick={() => navigate(`/books/${review.book.id}`)}>
+		<Wrapper>
 			<div className="card-content">
 				<div className="card-info">
 					<div
@@ -155,7 +147,7 @@ export const AdminReviewCard: React.FC<Props> = ({ review, acceptReview, rejectR
 							fontSize: '14px',
 						}}
 					>
-						{review.book.title}
+						{user.email}
 					</div>
 					<div
 						className="inter-regular"
@@ -164,7 +156,7 @@ export const AdminReviewCard: React.FC<Props> = ({ review, acceptReview, rejectR
 							color: colors.text3,
 						}}
 					>
-						{review.book.authors.map((author) => author.name + ' ' + author.surname).join(', ')}
+						{user.name + ' ' + user.surname}
 					</div>
 					<div
 						className="dm-sans-regular"
@@ -173,38 +165,34 @@ export const AdminReviewCard: React.FC<Props> = ({ review, acceptReview, rejectR
 							color: colors.text4,
 						}}
 					>
-						{review.content}
+						{user.role.id === 3 ? 'Admin' : 'User'}
 					</div>
 				</div>
 			</div>
 			<div className="profile-card-right-side">
 				<div className="extra-info">
-					<Score>
-						<StarOutlined style={{ color: colors.ascent }} />
-
-						<div className="inter-light" style={{ fontSize: '12px', color: colors.text3, whiteSpace: 'nowrap' }}>
-							{review.rate} / 5
-						</div>
-					</Score>
 					<div className="buttons">
 						<AscentButton
 							loading={acceptLoading}
 							onClick={(e) => {
 								e.stopPropagation();
-								handleAccept();
+								handleToggleAdmin();
 							}}
 						>
-							Accept
+							{user.role.id === 3 ? 'Remove admin' : 'Make admin'}
 						</AscentButton>
-						<DangerButton
-							loading={rejectLoading}
-							onClick={(e) => {
-								e.stopPropagation();
-								handleReject();
+						<Popconfirm
+							title="Delete the user"
+							description="Are you sure to delete this user?"
+							onConfirm={(e)=>{
+								e?.stopPropagation();
+								handleRemove();
 							}}
+							okText="Yes"
+							cancelText="No"
 						>
-							Reject
-						</DangerButton>
+							<DangerButton loading={rejectLoading}>Remove user</DangerButton>
+						</Popconfirm>
 					</div>
 				</div>
 			</div>

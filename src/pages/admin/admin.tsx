@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Header } from '../../components/header/header';
-import { AvatarInput } from '../../components/avatar_input';
-import { EditOutlined, ReadOutlined } from '@ant-design/icons';
+import { EditOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons';
 import { colors } from '../../styles/colors';
-import { ProfileReviewCard } from '../../components/profile-review-card';
 import { useAdmin } from './use_admin';
-import { AdminReviewCard } from '../../components/admin/admin-review-card';
+import { AdminReviewCard } from '../../components/admin-review-card';
 import { Skeleton } from 'antd';
+import { AdminBookCard } from '../../components/admin-book-card';
+import { AdminUserCard } from '../../components/admin-user-card';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -79,7 +79,7 @@ const RoundedIcon = styled.div`
 export const Admin: React.FC = () => {
 	const [selectedMenu, setSelectedMenu] = useState<number>(0);
 
-	const { user, reviews, books, acceptReview, rejectReview, acceptBook, rejectBook } = useAdmin();
+	const { user, reviews, books,users, acceptReview, rejectReview, acceptBook, rejectBook, removeUser, toggleAdmin } = useAdmin();
 
 	if (!user || user.role.id !== 3) {
 		return (
@@ -160,6 +160,30 @@ export const Admin: React.FC = () => {
 								Awaiting books
 							</div>
 						</MenuSelector>
+
+						<MenuSelector id="user-menu" onClick={(_) => setSelectedMenu(2)}>
+							<RoundedIcon
+								style={
+									selectedMenu === 1
+										? {
+												color: `${colors.ascent}`,
+											}
+										: {
+												color: `${colors.primaryShade2}`,
+											}
+								}
+							>
+								<UserOutlined />
+							</RoundedIcon>
+							<div
+								className={selectedMenu === 2 ? 'poppins-semibold' : 'poppins-regular'}
+								style={{
+									fontSize: '12px',
+								}}
+							>
+								Users
+							</div>
+						</MenuSelector>
 					</Menu>
 
 					<ItemList
@@ -181,8 +205,6 @@ export const Admin: React.FC = () => {
 								rejectReview={rejectReview}
 							></AdminReviewCard>
 						))}
-						
-					
 					</ItemList>
 					<ItemList
 						style={
@@ -195,14 +217,24 @@ export const Admin: React.FC = () => {
 									}
 						}
 					>
-						{/* {books.map((book) => (
-							<AdminReviewCard
-								key={book.id}
-								review={book}
-								acceptReview={acceptBook}
-								rejectReview={rejectBook}
-							></AdminReviewCard>
-						))} */}
+						{books.map((book) => (
+							<AdminBookCard key={book.id} book={book} acceptBook={acceptBook} rejectBook={rejectBook}></AdminBookCard>
+						))}
+					</ItemList>
+					<ItemList
+						style={
+							selectedMenu === 2
+								? {
+										display: 'flex',
+									}
+								: {
+										display: 'none',
+									}
+						}
+					>
+						{users.map((user) => (
+							<AdminUserCard key={user.id} user={user} toggleAdmin={toggleAdmin} removeUser={removeUser}></AdminUserCard>
+						))}
 					</ItemList>
 				</Wrapper>
 			</main>

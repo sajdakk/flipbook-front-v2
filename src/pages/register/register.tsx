@@ -128,23 +128,6 @@ export const Register: React.FC = () => {
 			.catch((_) => {});
 	};
 
-	useEffect(() => {
-		const emailInput = document.querySelector('#email');
-		emailInput?.setAttribute('placeholder', 'E-mail');
-
-		const nameInput = document.querySelector('#name');
-		nameInput?.setAttribute('placeholder', 'Name');
-
-		const surnameInput = document.querySelector('#surname');
-		surnameInput?.setAttribute('placeholder', 'Surname');
-
-		const passwordInput = document.querySelector('#password');
-		passwordInput?.setAttribute('placeholder', 'Password');
-
-		const repeatPasswordInput = document.querySelector('#repeatPassword');
-		repeatPasswordInput?.setAttribute('placeholder', 'Repeat password');
-	});
-
 	return (
 		<>
 			<Form onFinish={_onSubmit} scrollToFirstError form={form}>
@@ -170,7 +153,7 @@ export const Register: React.FC = () => {
 										},
 									]}
 								>
-									<Input />
+									<Input placeholder="E-mail" />
 								</Form.Item>
 								<Form.Item
 									name="name"
@@ -191,7 +174,7 @@ export const Register: React.FC = () => {
 										}),
 									]}
 								>
-									<Input />
+									<Input placeholder="Name" />
 								</Form.Item>
 								<Form.Item
 									name="surname"
@@ -211,7 +194,7 @@ export const Register: React.FC = () => {
 										}),
 									]}
 								>
-									<Input />
+									<Input placeholder="Surname" />
 								</Form.Item>
 
 								<Form.Item
@@ -223,7 +206,7 @@ export const Register: React.FC = () => {
 										},
 									]}
 								>
-									<Input.Password />
+									<Input.Password placeholder="Password" />
 								</Form.Item>
 								<Form.Item
 									name="repeatPassword"
@@ -243,7 +226,7 @@ export const Register: React.FC = () => {
 										}),
 									]}
 								>
-									<Input.Password />
+									<Input.Password placeholder="Repeat password" />
 								</Form.Item>
 							</div>
 
