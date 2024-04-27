@@ -125,15 +125,6 @@ export const Header: React.FC = () => {
 								Top
 							</Link>
 						</li>
-
-						<li>
-							<Link
-								to="/admin"
-								className={`${window.location.href.endsWith('/admin') ? `inter-regular selected` : `inter-regular `}`}
-							>
-								Admin
-							</Link>
-						</li>
 					</ul>
 				</Space>
 				<Space size={16}>
@@ -188,14 +179,18 @@ export const Header: React.FC = () => {
 							Profile
 						</Link>
 					</li>
-					<li>
-						<Link
-							to="/admin"
-							className={`${window.location.href.endsWith('/admin') ? `inter-regular selected` : `inter-regular `}`}
-						>
-							Admin
-						</Link>
-					</li>
+					{user.role.name === 'admin' && 
+						(<li>
+							<Link
+								to="/admin"
+								className={`${window.location.href.endsWith('/admin') ? `inter-regular selected` : `inter-regular `}`}
+							>
+								Admin
+							</Link>
+						</li>)
+						
+					}
+					
 				</ul>
 			</Space>
 			<Space size={16}>
