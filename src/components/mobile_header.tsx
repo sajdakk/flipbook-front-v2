@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { Logo } from './logo';
 import { SmallLogo } from './small-logo';
 import { Link } from 'react-router-dom';
+import { User } from '../types';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -144,8 +145,58 @@ const Wrapper = styled.div`
 	}
 `;
 
-export const MobileHeader: React.FC = () => {
+interface Props {
+	user: User | null | undefined;
+	logout: () => void;
+}
+
+export const MobileHeader: React.FC<Props> = ({ user, logout }) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+	if (!user) {
+		return (
+			<Wrapper>
+				<div className={`menu__btn ${isMenuOpen ? 'open' : 'closed'}`} onClick={() => setIsMenuOpen((prev) => !prev)}>
+					<span></span>
+				</div>
+				<ul className={`menu__box ${isMenuOpen ? 'open' : 'closed'}`}>
+					<li></li>
+					<li>
+						<Link className="menu__item poppins-regular" to="/">
+							Home
+						</Link>
+					</li>
+					<li>
+						<Link className="menu__item poppins-regular" to="/top">
+							Top
+						</Link>
+					</li>
+
+					<li className="divider"></li>
+					<li>
+						<Link className="secondary_menu__item poppins-regular" to="/create">
+							Add book
+						</Link>
+					</li>
+					<li>
+						<Link className="secondary_menu__item poppins-regular" to="/favorites">
+							Favorites
+						</Link>
+					</li>
+					<li>
+						<Link className="secondary_menu__item poppins-regular" to="/login">
+							Log in
+						</Link>
+					</li>
+					<li>
+						<Link className="secondary_menu__item poppins-regular" to="/register">
+							Sign up
+						</Link>
+					</li>
+				</ul>
+			</Wrapper>
+		);
+	}
 
 	return (
 		<Wrapper>
@@ -171,11 +222,13 @@ export const MobileHeader: React.FC = () => {
 					</Link>
 				</li>
 
-				<li>
-					<Link className="menu__item poppins-regular" to="/admin">
-						Admin
-					</Link>
-				</li>
+				{user.role.name === 'admin' && (
+					<li>
+						<Link to="/admin" className="menu__item poppins-regular">
+							Admin
+						</Link>
+					</li>
+				)}
 
 				<li className="divider"></li>
 				<li>
@@ -189,14 +242,16 @@ export const MobileHeader: React.FC = () => {
 					</Link>
 				</li>
 				<li>
-					<Link className="secondary_menu__item poppins-regular" to="/login">
-						Log in
-					</Link>
-				</li>
-				<li>
-					<Link className="secondary_menu__item poppins-regular" to="/register">
-						Sign up
-					</Link>
+					<a
+						className="secondary_menu__item poppins-regular"
+						href="#"
+						onClick={(e) => {
+							e.preventDefault();
+							logout();
+						}}
+					>
+						Log out
+					</a>
 				</li>
 			</ul>
 		</Wrapper>

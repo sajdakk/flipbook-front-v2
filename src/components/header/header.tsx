@@ -103,7 +103,7 @@ export const Header: React.FC = () => {
 	if (!user) {
 		return (
 			<Menu>
-				<MobileHeader />
+				<MobileHeader user={user} logout={logout} />
 				<SmallLogo />
 
 				<Space size={16}>
@@ -149,7 +149,7 @@ export const Header: React.FC = () => {
 
 	return (
 		<Menu>
-			<MobileHeader />
+			<MobileHeader user={user} logout={logout} />
 			<SmallLogo />
 
 			<Space size={16}>
