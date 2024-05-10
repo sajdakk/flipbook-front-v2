@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { API } from '../../utils/api';
 import { useSessionManager } from '../../utils/session_provider';
+import { message } from 'antd';
 
 export const useBookCard = (bookId: number) => {
 	const [isFavorite, setIsFavorite] = useState(false);
@@ -11,6 +12,11 @@ export const useBookCard = (bookId: number) => {
 	}, []);
 
 	const toggleFavorite = async () => {
+		if (!session.currentUser) {
+			message.error('You must be logged in to add a book to your favorites.');
+			return;
+		}
+
 		await API().favorites().toggle(bookId);
 		fetchData();
 	};

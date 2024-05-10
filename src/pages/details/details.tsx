@@ -39,7 +39,7 @@ export const Wrapper = styled.div`
 	}
 
 	@media screen and (max-width: 780px) {
-		.header {
+		>.header {
 			font-size: 20px;
 			align-self: flex-start;
 		}

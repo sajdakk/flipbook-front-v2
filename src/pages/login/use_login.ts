@@ -33,7 +33,7 @@ export const useLogin = () => {
 	const loginWithPassword = async (email: string, password: string) => {
 		try {
 			setLoading(true);
-			document.cookie = 'X-Auth-Token' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+			document.cookie = 'X-Auth-Token' + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 			const response = await API().login(email, password);
 			setLoading(false);
 
@@ -41,7 +41,7 @@ export const useLogin = () => {
 			navigate('/');
 		} catch (error) {
 			setLoading(false);
-			message.error(error.message);
+			message.error(error.response.data.message);
 		}
 	};
 

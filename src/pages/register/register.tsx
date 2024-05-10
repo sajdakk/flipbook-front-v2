@@ -166,7 +166,7 @@ export const Register: React.FC = () => {
 										() => ({
 											validator(_, value) {
 												const trimmed = value?.trim();
-												if (!trimmed && trimmed?.length > 0) {
+												if (trimmed && trimmed?.length > 0) {
 													return Promise.resolve();
 												}
 												return Promise.reject(new Error('The name that you entered is not valid!'));
@@ -186,7 +186,7 @@ export const Register: React.FC = () => {
 										() => ({
 											validator(_, value) {
 												const trimmed = value?.trim();
-												if (!trimmed && trimmed?.length > 0) {
+												if (trimmed && trimmed?.length > 0) {
 													return Promise.resolve();
 												}
 												return Promise.reject(new Error('The surname that you entered is not valid!'));

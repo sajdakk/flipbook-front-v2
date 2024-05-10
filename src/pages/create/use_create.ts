@@ -24,18 +24,39 @@ export const useCreate = () => {
 	}, [user]);
 
 	const fetchLanguages = async () => {
-		const response = await API().languages().get();
-		setLanguages(response.data);
+		try {
+			const response = await API().languages().get();
+			setLanguages(response.data);
+		} catch (e) {
+			message.error('Error fetching languages');
+			if (e.response.status === 401) {
+				sessionManager.logout();
+			}
+		}
 	};
 
 	const fetchGenres = async () => {
-		const response = await API().genres().get();
-		setGenres(response.data);
+		try {
+			const response = await API().genres().get();
+			setGenres(response.data);
+		} catch (e) {
+			message.error('Error fetching genres');
+			if (e.response.status === 401) {
+				sessionManager.logout();
+			}
+		}
 	};
 
 	const fetchAuthors = async () => {
-		const response = await API().authors().get();
-		setAuthors(response.data);
+		try {
+			const response = await API().authors().get();
+			setAuthors(response.data);
+		} catch (e) {
+			message.error('Error fetching authors');
+			if (e.response.status === 401) {
+				sessionManager.logout();
+			}
+		}
 	};
 
 	const addBook = async (book: AddBookDto) => {

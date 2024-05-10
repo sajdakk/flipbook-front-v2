@@ -22,6 +22,7 @@ const Wrapper = styled.div`
 	box-sizing: border-box;
 	text-overflow: ellipsis;
 
+
 	> .card-content {
 		display: flex;
 		flex-direction: column;
@@ -56,6 +57,14 @@ const Wrapper = styled.div`
 			border-radius: 50%;
 			object-fit: cover;
 		}
+
+
+	> .placeholder-image {
+		width: 120px;
+		height: 120px;
+		background-color: #ccc;
+		border-radius: 50%;
+	}
 
 		> .mobile-stars {
 			display: none;
@@ -95,6 +104,11 @@ const Wrapper = styled.div`
 				border-radius: 50%;
 				object-fit: cover;
 			}
+
+			> .placeholder-image {
+				width: 80px;
+				height: 80px;
+			}
 		}
 
 		> .stars {
@@ -123,7 +137,11 @@ export const ReviewCard: React.FC<Props> = ({ review }) => {
 	return (
 		<Wrapper>
 			<div className="mobile-left-side-card">
-				<img className="imagePreview" src={getFileUrl(review.user.avatar)} alt="avatar" />
+				{review.user.avatar ? (
+					<img src={getFileUrl(review.user.avatar)} alt="avatar" />
+				) : (
+					<div className="placeholder-image" />
+				)}
 
 				<Space className="mobile-stars" size={8}>
 					<StarOutlined className="rate" style={{ color: colors.ascent }} />

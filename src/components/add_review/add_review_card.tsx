@@ -1,5 +1,5 @@
 import { StarFilled, StarOutlined } from '@ant-design/icons';
-import { Input, TimePicker } from 'antd';
+import { Input, TimePicker, message } from 'antd';
 import React from 'react';
 import { styled } from 'styled-components';
 import { AscentButton } from '../ascent-button';
@@ -24,6 +24,13 @@ const Wrapper = styled.div`
 	box-sizing: border-box;
 	text-overflow: ellipsis;
 
+	> .placeholder-image {
+		width: 120px;
+		height: 120px;
+		background-color: #ccc;
+		border-radius: 50%;
+	}
+
 	> img {
 		width: 120px;
 		height: 120px;
@@ -47,6 +54,8 @@ const Wrapper = styled.div`
 		box-sizing: border-box;
 		flex-grow: 1;
 		gap: 12px;
+		flex: 1; /* this will make it expand to fill remaining space */
+
 	}
 
 	.header {
@@ -66,6 +75,11 @@ const Wrapper = styled.div`
 			height: 80px;
 			border-radius: 50%;
 			object-fit: cover;
+		}
+
+		> .placeholder-image {
+			width: 80px;
+			height: 80px;
 		}
 
 		gap: 12px;
@@ -128,10 +142,12 @@ export const AddReviewCard: React.FC<Props> = ({ user, book, addReview }) => {
 
 	const _submit = async () => {
 		if (review === '') {
+			message.error('Review cannot be empty.');
 			return;
 		}
 
 		if (selectedStar === 0) {
+			message.error('You must select a rating.');
 			return;
 		}
 
@@ -164,8 +180,11 @@ export const AddReviewCard: React.FC<Props> = ({ user, book, addReview }) => {
 
 	return (
 		<Wrapper>
-			<img className="imagePreview" src={getFileUrl(user.avatar)} alt="News Image 1" />
-
+			{user.avatar === null ? (
+				<div className="placeholder-image" />
+			) : (
+				<img className="imagePreview" src={getFileUrl(user.avatar)} alt="News Image 1" />
+			)}
 			<div className="review-content">
 				<div className="inter-semibold header">
 					{capitalize(user.name)} | {moment(now()).format('DD.MM.YYYY')} r.

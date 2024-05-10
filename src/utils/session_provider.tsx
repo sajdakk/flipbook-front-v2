@@ -99,6 +99,7 @@ export const SessionManagerProvider: React.FC<Props> = ({ children }: Props) => 
 			console.trace(error);
 
 			currentUserIdManager.setCurrentUserId(undefined);
+			setUser(undefined);
 			navigate('/login?logout=1');
 		}
 	};
