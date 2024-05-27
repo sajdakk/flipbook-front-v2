@@ -25,11 +25,8 @@ export const useDetails = () => {
 		return parsed;
 	}, [rawId]);
 
-	console.log(id);
-
 	useEffect(() => {
 		fetchData();
-		console.log('fetchData');
 	}, []);
 
 	const fetchData = async () => {
