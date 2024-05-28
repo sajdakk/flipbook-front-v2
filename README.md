@@ -18,7 +18,7 @@ Welcome to Flipbook, your go-to web app for exploring and sharing books! Follow 
 
 ### Installation
 
-To get started, download Docker and run the following commands: `docker-compose build` followed by `docker-compose up`. Once completed, open http://localhost:8080/ in your browser. 
+To get started, download Docker and run the following commands: `docker-compose build` followed by `docker-compose up`. Once completed, open http://localhost:1234/ in your browser. 
 
 ## Features
 
